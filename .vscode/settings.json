@@ -1,5 +1,5 @@
 {
-  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true, // Optinal
   "typescript.inlayHints.parameterNames.enabled": "all",
   "javascript.inlayHints.parameterNames.enabled": "all",
   "dotenv.enableAutocloaking": false,
