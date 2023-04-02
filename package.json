@@ -1,0 +1,10 @@
+{
+  "name": "ufabc-next-ms-users",
+  "version": "0.0.0",
+  "description": "User microservice for the ufabc-next backend",
+  "main": "dist/server.js",
+  "scripts": {},
+  "keywords": ["node", "ufabc", "microservices", "typescript"],
+  "author": "Joabe Silva <joabevarjao123@gmail.com>",
+  "license": "MIT"
+}
