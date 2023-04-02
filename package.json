@@ -2,9 +2,18 @@
   "name": "ufabc-next-ms-users",
   "version": "0.0.0",
   "description": "User microservice for the ufabc-next backend",
+  "engines": {
+    "pnpm": ">7.27.0",
+    "node": ">16.15.0"
+  },
   "main": "dist/server.js",
   "scripts": {},
-  "keywords": ["node", "ufabc", "microservices", "typescript"],
+  "keywords": [
+    "node",
+    "ufabc",
+    "microservices",
+    "typescript"
+  ],
   "author": "Joabe Silva <joabevarjao123@gmail.com>",
   "license": "MIT"
 }
