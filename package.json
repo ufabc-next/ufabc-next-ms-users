@@ -7,7 +7,10 @@
     "node": ">16.15.0"
   },
   "main": "dist/server.js",
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix"
+  },
   "keywords": [
     "node",
     "ufabc",
@@ -15,5 +18,8 @@
     "typescript"
   ],
   "author": "Joabe Silva <joabevarjao123@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^1.2.0"
+  }
 }
