@@ -1,5 +1,5 @@
 import { createServer } from 'node:http';
 
-createServer((req, res) => {
-  res.end('say hi');
+export const app = createServer((req, res) => {
+  console.log('less go watch mode');
 });

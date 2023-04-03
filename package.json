@@ -8,6 +8,8 @@
   },
   "main": "dist/server.js",
   "scripts": {
+    "start": "tsx src/server.ts",
+    "start:watch": "tsx watch src/server.ts",
     "build": "tsup --config tsup.prod.ts",
     "build:type-check": "tsc",
     "lint": "eslint . --ext .ts,.js",
