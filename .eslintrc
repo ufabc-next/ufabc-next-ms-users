@@ -1,0 +1,25 @@
+{
+  "extends": ["@rocketseat/eslint-config/node"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 80,
+        "tabWidth": 2,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "arrowParens": "always",
+        "semi": true
+      }
+    ],
+    "import/no-default-export": "error"
+  },
+  "overrides": [
+    {
+      "files": ["src/plugins/**/*"],
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    }
+  ]
+}
