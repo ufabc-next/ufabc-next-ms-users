@@ -18,8 +18,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
-      - uses: 'nick-fields/retry@v2.8.3'
+          cache: "pnpm"
+      - uses: nick-fields/retry@v2.8.3
         with:
           max_attempts: 10
           timeout_minutes: 15
@@ -34,7 +34,7 @@ jobs:
       matrix:
         node-version: [16, 18]
         # don't have them for now
-        command: ['test', 'lint']
+        command: ["test", "lint"]
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: pnpm install
-        uses: 'nick-fields/retry@v2.8.3'
+        uses: nick-fields/retry@v2.8.3
         with:
           max_attempts: 10
           timeout_minutes: 15
