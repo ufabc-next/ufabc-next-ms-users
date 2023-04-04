@@ -12,7 +12,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "types": ["vitest/globals", "node"],    
     // Folder for type augmentation
-    "typeRoots": ["./node_modules/@types","src/types"]    
+    "typeRoots": ["src/@types"]
   } 
 }
