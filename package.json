@@ -26,8 +26,11 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",
     "@types/node": "^18.15.11",
+    "@vitest/ui": "^0.29.8",
+    "c8": "^7.13.0",
     "tsup": "^6.7.0",
     "tsx": "^3.12.6",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "vitest": "^0.29.8"
   }
 }
