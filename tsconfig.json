@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "ES2020",
+    "module": "commonjs",
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    // do not remove!
+    "strict": true,
+    // if it breaks remove
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    // Folder for type augmentation
+    "typeRoots": ["./node_modules/@types","src/types"]    
+  } 
+}

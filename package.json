@@ -8,6 +8,10 @@
   },
   "main": "dist/server.js",
   "scripts": {
+    "start": "tsx src/server.ts",
+    "start:watch": "tsx watch src/server.ts",
+    "build": "tsup --config tsup.prod.ts",
+    "build:type-check": "tsc",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix"
   },
@@ -20,6 +24,10 @@
   "author": "Joabe Silva <joabevarjao123@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@rocketseat/eslint-config": "^1.2.0"
+    "@rocketseat/eslint-config": "^1.2.0",
+    "@types/node": "^18.15.11",
+    "tsup": "^6.7.0",
+    "tsx": "^3.12.6",
+    "typescript": "^5.0.3"
   }
 }

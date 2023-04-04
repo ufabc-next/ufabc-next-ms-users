@@ -1,8 +1,0 @@
-{
-  "recommendations": [
-    "dotenv.dotenv-vscode",
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint",
-    "ms-azuretools.vscode-docker"
-  ]
-}
