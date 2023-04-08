@@ -10,7 +10,7 @@
   "scripts": {
     "start": "tsx src/server.ts",
     "start:watch": "tsx watch src/server.ts",
-    "build": "tsup --config tsup.prod.ts",
+    "build": "tsup --config tsup.config.ts",
     "build:type-check": "tsc",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
@@ -37,5 +37,10 @@
     "tsx": "^3.12.6",
     "typescript": "^5.0.3",
     "vitest": "^0.29.8"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "fastify": "^4.15.0",
+    "zod": "^3.21.4"
   }
 }
