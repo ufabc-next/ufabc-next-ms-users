@@ -46,13 +46,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: pnpm install
-        uses: nick-fields/retry@v2.8.3
-        with:
-          max_attempts: 10
-          timeout_minutes: 15
-          retry_on: error
-          command: pnpm install --frozen-lockfile
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+        shell: bash
+        env:
+            CI: true
+            with:
+            packageManager: pnpm
       - name: pnpm action setup     
         uses: pnpm/action-setup@v2.2.4
         with:
