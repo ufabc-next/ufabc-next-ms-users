@@ -1,5 +1,6 @@
-import { createServer } from 'node:http';
+import fastify from 'fastify';
 
-export const app = createServer((req, res) => {
-  console.log('less go watch mode');
+export const app = fastify({
+  // Native fastify logger, it's fast! https://github.com/pinojs/pino
+  logger: true,
 });
