@@ -39,9 +39,6 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 8.1.1
       - name: Use Node supported versions
         uses: actions/setup-node@v3
         with:
@@ -56,4 +53,5 @@ jobs:
       - name: pnpm action setup     
         uses: pnpm/action-setup@v2.2.4
         with:
+          version: 8.1.1
           command: ${{matrix.command}}
