@@ -20,7 +20,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "pnpm"
       - uses: nick-fields/retry@v2.8.3
         with:
           max_attempts: 10
