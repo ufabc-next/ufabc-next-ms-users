@@ -1,8 +1,9 @@
 import { app } from '@/app';
+import { config } from '@/config/env';
 
 app.get('/', (request, reply) => {
   // Native json parsing
   return { message: 'Hello World!' };
 });
 
-app.listen({ port: 5000, host: '0.0.0.0' });
+app.listen({ port: config.PORT, host: config.HOST });
