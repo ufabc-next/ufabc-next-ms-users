@@ -50,3 +50,36 @@ jobs:
       - name: lint code
         run: |
           pnpm lint
+
+  tests:
+    strategy:
+      matrix:
+        node-versions: [16, 18]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    needs: [linter]
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{matrix.node-versions}}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7
+          run_install: true
+
+      - name: Install
+        run: |
+          pnpm i --ignore-scripts
+
+      - name: Run tests
+        # TODO: create a test:ci script
+        run: |
+          pnpm test
