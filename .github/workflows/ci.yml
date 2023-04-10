@@ -8,15 +8,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ${{matrix.os}}
+  deps-review:
     strategy:
       matrix:
-        node-versions: [16.x, 18.x]
         os: [ubuntu-latest, windows-latest]
+    name: Dependecy Check
+    if: github.event_name == 'pull_request'
+    runs-on: ${{matrix.os}}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
 
+  linter:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Use Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -24,39 +44,9 @@ jobs:
           version: 7
           run_install: true
 
-      - name: use Supported versions ${{matrix.node-versions}}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{matrix.node-versions}}
-          cache: "pnpm"
-
-      - name: Run tests
+      - name: Install
         run: |
-          pnpm test
-
-  build:
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix:
-        node-versions: [16.x, 18.x]
-        os: [ubuntu-latest, windows-latest]
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 7
-          run_install: true
-
-      - name: use Supported versions ${{matrix.node-versions}}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{matrix.node-versions}}
-          cache: "pnpm"
-
-      - name: Build
+          pnpm i
+      - name: lint code
         run: |
-          pnpm build
-          pnpm build:type-check
+          pnpm lint
