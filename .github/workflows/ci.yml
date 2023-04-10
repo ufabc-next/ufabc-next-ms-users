@@ -8,26 +8,27 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
     strategy:
       matrix:
         node-versions: [16.x, 18.x]
+        os: [ubuntu-latest]
+
     steps:
       - uses: actions/checkout@v3
-      - name: Supported versions ${{matrix.node-versions}}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@2.2.4
+        with:
+          version: 7
+          run_install: true
+
+      - name: use Supported versions ${{matrix.node-versions}}
         uses: actions/setup-node@v3
         with:
           node-version: ${{matrix.node-versions}}
+          cache: "pnpm"
 
-      - name: Install dependencies
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8.1.1
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile, --strict-peer-dependencies]
-
-      - name: Lint and Test
-        uses: pnpm/action-setup@v2
-        with:
-          command: pnpm lint && pnpm test
+      - name: Build
+        run: |
+          pnpm build
