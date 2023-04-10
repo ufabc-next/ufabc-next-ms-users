@@ -83,3 +83,36 @@ jobs:
         # TODO: create a test:ci script
         run: |
           pnpm test
+
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-versions: [16, 18]
+
+    needs: [linter, tests]
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{matrix.node-versions}}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7
+          run_install: true
+
+      - name: Install
+        run: |
+          pnpm i --ignore-scripts
+
+      - name: Build and Type-Check
+        run: |
+          pnpm build
+          pnpm build:type-check
