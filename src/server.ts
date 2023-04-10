@@ -1,9 +1,13 @@
 import { app } from '@/app';
 import { config } from '@/config/env';
 
-app.get('/', (request, reply) => {
-  // Native json parsing
-  return { message: 'Hello World!' };
-});
+const start = async () => {
+  try {
+    await app.listen({ port: config.PORT, host: config.HOST });
+  } catch (error) {
+    app.log.fatal(error, 'Error Starting server');
+    throw error;
+  }
+};
 
-app.listen({ port: config.PORT, host: config.HOST });
+start();
