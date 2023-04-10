@@ -6,13 +6,40 @@ on:
   pull_request:
     branches: [main, microservice/user]
   workflow_dispatch:
+
 jobs:
+  test:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        node-versions: [16.x, 18.x]
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7
+          run_install: true
+
+      - name: use Supported versions ${{matrix.node-versions}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{matrix.node-versions}}
+          cache: "pnpm"
+
+      - name: Run tests
+        run: |
+          pnpm test
+
   build:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
         node-versions: [16.x, 18.x]
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -32,3 +59,4 @@ jobs:
       - name: Build
         run: |
           pnpm build
+          pnpm build:type-check
