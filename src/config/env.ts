@@ -18,6 +18,7 @@ const envSchema = z.object({
   MONGODB_PASSWORD: z.string().min(6),
   // Database name
   MONGODB_NAME: z.string(),
+  DATABASE_URL: z.string().url(),
 });
 
 const _env = envSchema.safeParse(process.env);
