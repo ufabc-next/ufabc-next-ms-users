@@ -2,15 +2,14 @@ version: '3.8'
 
 services:
   mongodb:
+    container_name: ufabc-next-users
     image: mongo:5.0.15
-    env_file:
-      - .env
-    container_name: $MONGODB_NAME
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadm
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MONGO_INITDB_DATABASE=ufabc-next-users
     restart: always
     ports:
-      - $MONGODB_PORT:$MONGODB_PORT
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: $MONGODB_USER
-      MONGO_INITDB_ROOT_PASSWORD: $MONGODB_PASSWORD
-      MONGO_INITDB_DATABASE: $MONGODB_NAME
+      - "27017:27017"
+   
     

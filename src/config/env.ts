@@ -12,12 +12,6 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['dev', 'test', 'prod']).default('dev'),
   PORT: z.coerce.number().default(5000),
   HOST: z.string().min(4).default('localhost'),
-  // MONGODB
-  MONGODB_PORT: z.coerce.number().default(27017),
-  MONGODB_USER: z.string(),
-  MONGODB_PASSWORD: z.string().min(6),
-  // Database name
-  MONGODB_NAME: z.string(),
   DATABASE_URL: z.string().url(),
 });
 
