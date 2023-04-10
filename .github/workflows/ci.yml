@@ -2,56 +2,32 @@ name: ci
 
 on:
   push:
-    branches: [main, chore/user]
+    branches: [main, microservice/user]
   pull_request:
-    branches: [main, chore/user]
+    branches: [main, microservice/user]
+  workflow_dispatch:
 jobs:
-  setup-node_modules:
-    runs-on: ${{matrix.os}}
-    timeout-minutes: 15
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 8.1.1
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - uses: nick-fields/retry@v2.8.3
-        with:
-          max_attempts: 10
-          timeout_minutes: 15
-          retry_on: error
-          command: pnpm fetch 
-
   build:
-    needs: setup-node_modules
-    runs-on: ${{matrix.os}}
-    timeout-minutes: 5
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16, 18]
-        # don't have them for now
-        command: ["test", "lint"]
-        os: [ubuntu-latest]
+        node-versions: [16.x, 18.x]
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node supported versions
+      - name: Supported versions ${{matrix.node-versions}}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-        shell: bash
-        env:
-            CI: true
-            with:
-            packageManager: pnpm
-      - name: pnpm action setup     
-        uses: pnpm/action-setup@v2.2.4
+          node-version: ${{matrix.node-versions}}
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2
         with:
           version: 8.1.1
-          command: ${{matrix.command}}
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+
+      - name: Lint and Test
+        uses: pnpm/action-setup@v2
+        with:
+          command: pnpm lint && pnpm test
