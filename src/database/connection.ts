@@ -1,7 +1,7 @@
 import { config } from '@/config/env';
 import { connect } from 'mongoose';
 
-connect(config.DATABASE_URL, {
+export const connection = connect(config.DATABASE_URL, {
   dbName: config.DB_NAME,
 })
   .then(() => {
