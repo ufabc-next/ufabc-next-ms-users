@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 const oauthSchema = z.object({
-  facebook: z.string(),
-  emailFacebook: z.string().email(),
-  google: z.string(),
-  emailGoogle: z.string().email(),
-  email: z.string().email(),
+  facebook: z.string().optional(),
+  emailFacebook: z.string().email().optional(),
+  google: z.string().optional(),
+  emailGoogle: z.string().email().optional(),
+  email: z.string().email().optional(),
 });
 
 const devicesSchema = z.object({
@@ -16,7 +16,7 @@ const devicesSchema = z.object({
 
 export const userSchema = z.object({
   ra: z.number().int(),
-  created_at: z.date(),
+  created_at: z.string().datetime(),
   email: z.string().email(),
   confirmed: z.boolean(),
   devices: z.array(devicesSchema),
