@@ -12,7 +12,7 @@ export async function userInfoHandler(
     const user = await showUserInfo(userInput);
     return reply.code(201).send(user);
   } catch (error) {
-    request.log.info(error, 'error getting user info');
+    request.log.error(error, 'error getting user info');
     throw error;
   }
 }

@@ -1,4 +1,5 @@
 import fastify from 'fastify';
+import { fastifySensible } from '@fastify/sensible';
 import { ZodError } from 'zod';
 import { prettyLog } from './config/logger';
 import { userRoutes } from './modules/user-routes';
@@ -9,6 +10,7 @@ export const app = fastify({
   logger: prettyLog,
 });
 
+app.register(fastifySensible);
 app.register(userRoutes, {
   prefix: '/users',
 });
