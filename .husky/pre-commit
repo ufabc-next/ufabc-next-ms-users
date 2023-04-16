@@ -2,18 +2,26 @@
 
 . "$(dirname "$0")/_/husky.sh"
 
-echo "running tests"
+#echo -e allows scape characters 
+echo -e "\e[32mrunning tests\e[0m"
 pnpm test  
 
 echo "running lint"
-pnpm lint 
+pnpm lint --fix
 
 echo "validate branch name"
 
-isAValidBranchName = pnpm enforce-branch-name '(hotfix|bugfix|feature)\/.+' --ignore 'staging'
+local_branch="$(git rev-parse --abbrev-ref HEAD)"
 
-if $?; 
+valid_branch_regex="^((feature|hotfix|bugfix)\/.+)[a-z0-9._-]{2,20}"
+
+message="This branch violates the branch naming rules. Please rename your branch."
+
+if [[ ! $local_branch =~ $valid_branch_regex ]]
 then
-  echo "[pre-commit-hook] Your branch name is illegal. Please rename your branch with using following feature/bugfix/hotfix/"
-  exit 1
+    echo "$message"
+    exit 1
 fi
+
+exit 0
+
