@@ -2,14 +2,20 @@
 
 . "$(dirname "$0")/_/husky.sh"
 
-#echo -e allows scape characters 
-echo -e "\e[32mrunning tests\e[0m"
+highlightText() {
+  string=$1
+  #echo -e allows scape characters
+  echo -e "\e[32m$string\e[0m" 
+}
+
+
+highlightText "Running tests" 
 pnpm test  
 
-echo "running lint"
+highlightText "Running lint" 
 pnpm lint --fix
 
-echo "validate branch name"
+highlightText "Running branch validator" 
 
 local_branch="$(git rev-parse --abbrev-ref HEAD)"
 
@@ -24,4 +30,5 @@ then
 fi
 
 exit 0
+
 

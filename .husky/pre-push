@@ -1,0 +1,9 @@
+echo "\e[32mRunning commit message validator\e[0m" 
+
+if pnpm commitlint --edit $1 = "0" 
+then 
+  echo "commit message is standarnized"
+else
+  echo "commit message isn't standarnized"
+  echo "Please run the command git commit --amend"
+fi
