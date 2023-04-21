@@ -15,8 +15,8 @@ pnpm test
 highlightText "Running lint" 
 pnpm lint --fix
 
-highlightText "Running  commit message validator" 
-pnpm commitlint --edit $1
+highlightText "Running commit message validator" 
+npx commitlint --edit $1
 
 highlightText "Running branch validator" 
 
