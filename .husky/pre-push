@@ -10,4 +10,5 @@ then
 else
   echo "commit message isn't standarnized"
   echo "Please run the command git commit --amend"
+  exit 0 
 fi
