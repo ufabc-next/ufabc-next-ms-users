@@ -1,6 +1,6 @@
 {
   "name": "ufabc-next-ms-users",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Users microservice for the ufabc-next backend",
   "engines": {
     "pnpm": ">7.27.0",

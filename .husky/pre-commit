@@ -16,7 +16,26 @@ highlightText "Running lint"
 pnpm lint --fix
 
 highlightText "Running commit message validator" 
-npx commitlint --edit $1
+if [npx commitlint --edit $1 = "0"]
+  then 
+    echo "commit message is standarnized"
+    exit 0
+else
+  echo "commit message isn't standarnized"
+  echo "the correct sintax is type(scope?): subject "
+  echo "type examples: feat, chore, test, fix"
+  echo "options examples: controller, config, view"
+  echo "subject should describe what do you implements"
+  echo "if you have problems consider use of fit commit --amend -m \"new message\" --no-verify"
+  git commit --amend -m \"fix: wrong message\" --no-verify
+  exit 1 
+fi
+
+
+
+
+echo "testando retorno"
+echo $?
 
 highlightText "Running branch validator" 
 
