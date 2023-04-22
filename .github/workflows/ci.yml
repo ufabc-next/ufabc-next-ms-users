@@ -38,15 +38,12 @@ jobs:
         with:
           node-version: "lts/*"
 
-      - name: Install pnpm
+      - name: Install pnpm and project dependency
         uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7
-          run_install: true
-
-      - name: Install
-        run: |
-          pnpm i
+          version: 7.28.0
+          run_install: |
+              args: [--no-frozen-lockfile]
       - name: lint code
         run: |
           pnpm lint
@@ -69,15 +66,12 @@ jobs:
         with:
           node-version: ${{matrix.node-versions}}
 
-      - name: Install pnpm
+      - name: Install pnpm and project dependency
         uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7
-          run_install: true
-
-      - name: Install
-        run: |
-          pnpm i --ignore-scripts
+          version: 7.28.0
+          run_install: |
+            args: [--no-frozen-lockfile]
 
       - name: Run tests
         # TODO: create a test:ci script
@@ -102,15 +96,13 @@ jobs:
         with:
           node-version: ${{matrix.node-versions}}
 
-      - name: Install pnpm
+      - name: Install pnpm and project dependency
         uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7
-          run_install: true
+           version: 7.28.0
+           run_install: |
+            args: [--no-frozen-lockfile]
 
-      - name: Install
-        run: |
-          pnpm i --ignore-scripts
 
       - name: Build and Type-Check
         run: |
