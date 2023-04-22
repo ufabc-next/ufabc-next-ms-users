@@ -43,11 +43,10 @@ jobs:
         with:
           version: 7.28.0
           run_install: |
-            - recursive: true
-              args: [--frozen-lockfile]
+              args: [--no-frozen-lockfile]
       - name: Install
         run: |
-          pnpm install --no-frozen-lockfile
+          pnpm install
       - name: lint code
         run: |
           pnpm lint
