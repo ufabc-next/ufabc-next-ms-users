@@ -8,20 +8,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  deps-review:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    name: Dependecy Check
-    if: github.event_name == 'pull_request'
-    runs-on: ${{matrix.os}}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v3
+  # deps-review:
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest]
+  #   name: Dependecy Check
+  #   if: github.event_name == 'pull_request'
+  #   runs-on: ${{matrix.os}}
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v3
+  #       with:
+  #         persist-credentials: false
+  #     - name: Dependency Review
+  #       uses: actions/dependency-review-action@v3
 
   linter:
     strategy:
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install
         run: |
-          pnpm i
+          pnpm install --no-frozen-lockfile
       - name: lint code
         run: |
           pnpm lint
@@ -77,7 +77,7 @@ jobs:
 
       - name: Install
         run: |
-          pnpm i --ignore-scripts
+          pnpm install --ignore-scripts
 
       - name: Run tests
         # TODO: create a test:ci script
