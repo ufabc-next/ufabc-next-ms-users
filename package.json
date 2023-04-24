@@ -32,8 +32,8 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",
     "@types/node": "^18.15.11",
-    "@vitest/coverage-c8": "^0.29.8",
-    "@vitest/ui": "^0.29.8",
+    "@vitest/coverage-c8": "^0.30.0",
+    "@vitest/ui": "^0.30.0",
     "@commitlint/cli": "17.6.1",
     "@commitlint/config-conventional": "17.6.1",
     "vite": "^2.6.13",
@@ -42,7 +42,7 @@
     "tsup": "^6.7.0",
     "tsx": "^3.12.6",
     "typescript": "^5.0.3",
-    "vitest": "^0.29.8"
+    "vitest": "^0.30.0"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
