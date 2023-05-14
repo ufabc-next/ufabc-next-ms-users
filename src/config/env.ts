@@ -19,7 +19,7 @@ const envSchema = z.object({
   // Database name
   MONGODB_NAME: z.string(),
   // Db url
-  CONNECTION_URL: z.string()
+  CONNECTION_URL: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

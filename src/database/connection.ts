@@ -7,8 +7,7 @@ export async function connectToMongo() {
     const connection = await connect(config.CONNECTION_URL);
     return connection;
   } catch (error) {
-    console.error("Error connecting to mongo:", error)
-    throw error
+    console.error('Error connecting to mongo:', error);
+    throw error;
   }
 }
-

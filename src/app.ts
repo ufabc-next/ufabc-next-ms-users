@@ -9,8 +9,8 @@ export async function buildApp() {
   try {
     await connectToMongo();
   } catch (error) {
-    app.log.fatal("setup app error", error)
-    throw error
+    app.log.fatal('setup app error', error);
+    throw error;
   }
 
   return app;
