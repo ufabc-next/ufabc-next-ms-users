@@ -10,8 +10,8 @@ export async function buildApp() {
   try {
     await connectToMongo();
     app.register(usage, {
-      prefix: '/stats/usage'
-    })
+      prefix: '/stats/usage',
+    });
   } catch (error) {
     app.log.fatal('setup app error', error);
     throw error;

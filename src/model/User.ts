@@ -16,10 +16,12 @@ type UserModel = Model<User, {}, UserMethods>;
 
 const userSchema = new Schema<User, UserModel, UserMethods>({
   ra: {
+    type: Number,
     unique: true,
     partialFilterExpression: { ra: { $exists: true } },
   },
   email: {
+    type: String,
     validate: {
       validator: (v: string) => v.indexOf('ufabc.edu.br') !== -1,
       message: (props) => `${props.value} não é um e-mail válido.`,
@@ -28,9 +30,11 @@ const userSchema = new Schema<User, UserModel, UserMethods>({
     partialFilterExpression: { email: { $exists: true } },
   },
   confirmed: {
+    type: Boolean,
     default: false,
   },
   active: {
+    type: Boolean,
     default: true,
   },
 });
