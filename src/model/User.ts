@@ -3,6 +3,8 @@ import { uniqBy } from 'remeda';
 import { User } from './zod/UserSchema';
 import { Unpacked } from '@/helpers/types/unpacked';
 
+// TODO: Create the methods for email Confirmation and generateJWT
+
 type UserMethods = {
   addDevice(device: User['devices']): void;
   removeDevice(deviceId: ObjectId): Array<ObjectId>;
@@ -11,6 +13,7 @@ type UserMethods = {
 };
 
 type UserModel = Model<User, {}, UserMethods>;
+
 const userSchema = new Schema<User, UserModel, UserMethods>({
   ra: {
     unique: true,
@@ -32,6 +35,10 @@ const userSchema = new Schema<User, UserModel, UserMethods>({
   },
 });
 
+userSchema.virtual('isFilled').get(function () {
+  return this.ra && this.email;
+});
+
 userSchema.method(
   'addDevice',
   function (this: User, device: Unpacked<User['devices']>) {
@@ -44,5 +51,13 @@ userSchema.method(
 userSchema.method('removeDevice', function (this: User, deviceId: string) {
   this.devices = this.devices.filter((device) => device.deviceId !== deviceId);
 });
+
+userSchema.pre('save', async function (this: any) {
+  if (this.isFilled && !this.confirmed) {
+    this.sendConfirmation();
+  }
+});
+
+userSchema.index({ ra: -1 });
 
 export const userModel = model<User, UserModel>('User', userSchema);
