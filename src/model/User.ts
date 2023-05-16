@@ -1,5 +1,7 @@
 import { Model, ObjectId, Schema, model } from 'mongoose';
+import { uniqBy } from 'remeda';
 import { User } from './zod/UserSchema';
+import { Unpacked } from '@/helpers/types/unpacked';
 
 type UserMethods = {
   addDevice(device: User['devices']): void;
@@ -9,7 +11,6 @@ type UserMethods = {
 };
 
 type UserModel = Model<User, {}, UserMethods>;
-
 const userSchema = new Schema<User, UserModel, UserMethods>({
   ra: {
     unique: true,
@@ -29,6 +30,19 @@ const userSchema = new Schema<User, UserModel, UserMethods>({
   active: {
     default: true,
   },
+});
+
+userSchema.method(
+  'addDevice',
+  function (this: User, device: Unpacked<User['devices']>) {
+    this.devices.unshift(device);
+    const uniqueDevice = uniqBy(this.devices, (device) => device.deviceId);
+    this.devices = uniqueDevice;
+  },
+);
+
+userSchema.method('removeDevice', function (this: User, deviceId: string) {
+  this.devices = this.devices.filter((device) => device.deviceId !== deviceId);
 });
 
 export const userModel = model<User, UserModel>('User', userSchema);

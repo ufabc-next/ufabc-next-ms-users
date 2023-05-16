@@ -26,7 +26,7 @@ const createUserSchema = z.object({
   active: z.boolean(),
   permissions: z.string().array(),
   createdAt: z.string().datetime(),
-  devices: deviceSchema.optional(),
+  devices: deviceSchema.array(),
 });
 
 export type User = z.infer<typeof createUserSchema>;

@@ -10,6 +10,9 @@ dependencies:
   mongoose:
     specifier: ^7.1.1
     version: 7.1.1
+  remeda:
+    specifier: ^1.14.0
+    version: 1.14.0
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -3606,6 +3609,10 @@ packages:
     resolution: {integrity: sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg==}
     engines: {node: '>=8'}
     dev: true
+
+  /remeda@1.14.0:
+    resolution: {integrity: sha512-AFPpCRtlYAcSzW4cI8sOw+x+BtbvX6tIwL3lhRxUO9YuPXRe06N1woIMPq/O1cNNy5n4a0TwbIHIciqnswkaQg==}
+    dev: false
 
   /require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
