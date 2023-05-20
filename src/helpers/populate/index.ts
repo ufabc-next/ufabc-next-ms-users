@@ -30,41 +30,27 @@ function setInsertPriority(populateFiles: Record<string, string>) {
 }
 
 async function populate() {
-  let operation, context, only, until;
-
-  // check if running from terminal or is required
+  let until;
+  const operation = process.argv[2]
+  const only = process.argv[4]
+  // DO NOT CHANGE THIS
+  const COMMUNITY = 'test';
+  // DO NOT CHANGE THIS
 
   if (config.NODE_ENV === 'prod') {
     throw new Error('You cannot populate under production mode!!!');
   }
 
-  // DO NOT CHANGE THIS
-  const COMMUNITY = 'test';
-  // DO NOT CHANGE THIS
-
-  if (!['add', 'remove', 'both'].includes(operation as any)) {
+  if (!['insert', 'remove', 'both'].includes(operation)) {
     throw new Error('Wrong operation. Choose between: add, remove or both');
   }
 
-  if (context !== null && !['remote', 'local', null].includes(context as any)) {
-    throw new Error('Wrong context. Choose between: remote or local');
-  }
-
-  // Is this necessary?
-  if (context === 'remote') {
-    process.env.MONGO_URL = process.env.POPULATE_REMOTE;
-  }
-
-  if (context === 'local' || context === null) {
-    process.env.MONGO_URL = process.env.POPULATE_LOCAL || process.env.MONGO_URL;
-  }
-
   if (operation === 'insert') {
-    return await createDatabases(app, COMMUNITY, only, until);
+    return createDatabases(app, COMMUNITY, only, until);
   }
 
   if (operation === 'remove') {
-    return await dumpDatabases(app, COMMUNITY, only, until);
+    return dumpDatabases(app, COMMUNITY, only, until);
   }
 
   if (operation === 'both') {
@@ -77,18 +63,16 @@ async function populate() {
 
 async function createDatabases(app, COMMUNITY, only, until) {
   // load models from data folder and sort them by priority
-
   const data = setInsertPriority(await import('./data'));
-
   // store all the ids for every model
   const ids = {};
 
   for (const model in data) {
     if (only != null && !only.includes(model)) continue;
-    const generateData = data[model];
+    const generatedData = data[model];
 
     // must pass the ids to generateData(ids), because some models need it
-    let dataModels = generateData(app, ids);
+    let dataModels = generatedData(app, ids);
 
     // avoid wrong device sign up on dev enviroment
     // this can cause Firebase FCM problems
@@ -132,12 +116,8 @@ async function createDatabases(app, COMMUNITY, only, until) {
     // reload indexes
     if (shouldIndex) {
       const client = app.elastic;
-      const refresh = bluebird.promisify(client.indices.refresh, {
-        context: client,
-      });
-      const exists = bluebird.promisify(client.indices.exists, {
-        context: client,
-      });
+      const refresh = bluebird.promisify(client.indices.refresh);
+      const exists = bluebird.promisify(client.indices.exists);
 
       const indexName = model.toLowerCase();
 
