@@ -1,6 +1,5 @@
 import { config } from '@/config/env';
-
-// this file populates MongoDB test database with data
+import { zipObj } from 'remeda'; // this file populates MongoDB test database with data
 const _ = require('lodash');
 const app = require('../app');
 const bluebird = require('bluebird');
@@ -25,16 +24,10 @@ const cachegoose = require('cachegoose')(
   },
 )();
 
-async function populate(options?: {}) {
+async function populate() {
   let operation, context, only, until;
 
   // check if running from terminal or is required
-  // and set operation and context accordingly
-  if (options === null) {
-    operation = process.argv[2];
-    context = process.argv[3];
-    only = process.argv[4];
-  }
 
   if (config.NODE_ENV == 'prod') {
     throw new Error('You cannot populate under production mode!!!');
@@ -54,27 +47,13 @@ async function populate(options?: {}) {
 
   // ONLY SET PROCESS WHEN USING TERMINAL, NOT FROM CODE
   // only show this when running from terminal
-  if (options == null) {
-    console.info('Bootstrapping basic components...');
-    console.info();
-    await app.bootstrap([
-      'package',
-      'config',
-      'helpers',
-      'mongo',
-      'models',
-      'redis',
-      'redirect',
-    ]);
 
-    if (context == 'remote') {
-      process.env.MONGO_URL = process.env.POPULATE_REMOTE;
-    }
+  if (context == 'remote') {
+    process.env.MONGO_URL = process.env.POPULATE_REMOTE;
+  }
 
-    if (context == 'local' || context == null) {
-      process.env.MONGO_URL =
-        process.env.POPULATE_LOCAL || process.env.MONGO_URL;
-    }
+  if (context == 'local' || context == null) {
+    process.env.MONGO_URL = process.env.POPULATE_LOCAL || process.env.MONGO_URL;
   }
 
   if (operation == 'add') {
@@ -92,35 +71,24 @@ async function populate(options?: {}) {
   }
 }
 
-// extend lodash to sort by key
-_.mixin({
-  sortKeysBy: function (obj, comparator) {
-    const keys = _.sortBy(_.keys(obj), function (key) {
-      return comparator ? comparator(obj[key], key) : key;
-    });
+function setInsertPriority(obj: Record<string, unknown>) {
+  const keys = Object.keys(obj).reverse();
 
-    return _.zipObject(
-      keys,
-      _.map(keys, function (key) {
-        return obj[key];
-      }),
-    );
-  },
-});
+  return zipObj(
+    keys,
+    keys.map(key => {
+      return obj[key];
+    }),
+  );
+}
 
 // give models priorities
 // it is necessary because some models needs ids (or models) from another models
-const modelPriority = {
-  teachers: 1,
-  subjects: 2,
-};
 
 async function createDatabases(app, COMMUNITY, only, until) {
   // load models from data folder and sort them by priority
 
-  const data = _.sortKeysBy(import('./data'), function (prev, next) {
-    return modelPriority[next];
-  });
+  const data = setInsertPriority(await import('./data'));
 
   // store all the ids for every model
   const ids = {};
@@ -199,9 +167,7 @@ async function createDatabases(app, COMMUNITY, only, until) {
 }
 
 async function dumpDatabases(app, COMMUNITY, only, until) {
-  const data = _.sortKeysBy(import('./data'), function (prev, next) {
-    return modelPriority[next];
-  });
+  const data = setInsertPriority(await import('./data'));
 
   cachegoose.clearCache(null);
   await app.redis.cache.clear();
