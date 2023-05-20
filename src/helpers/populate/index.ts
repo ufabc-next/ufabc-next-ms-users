@@ -1,19 +1,13 @@
 import { config } from '@/config/env';
-import { zipObj } from 'remeda'; // this file populates MongoDB test database with data
+import { zipObj } from 'remeda';
+
 const _ = require('lodash');
 const app = require('../app');
 const bluebird = require('bluebird');
-const requireSmart = require('require-smart');
-const cachegoose = require('cachegoose')(
-  /*
-  If this file is imported, then it must export a function
-  so that the requiree can call it
-  But if it's called from terminal we just need to run it
-  So, we need to check if it's an import
-  */
+const cachegoose = require('cachegoose');
 
-  // run populate
-  async function () {
+ // this file populates MongoDB test database with data
+(async () => {
     try {
       await populate();
       process.exit(0);
@@ -21,15 +15,26 @@ const cachegoose = require('cachegoose')(
       console.error(e);
       process.exit(1);
     }
-  },
-)();
+})();
+
+
+function setInsertPriority(populateFiles: Record<string, string>) {
+  const files = Object.keys(populateFiles).reverse();
+
+  return zipObj(
+    files,
+    files.map(file => {
+      return populateFiles[file];
+    }),
+  );
+}
 
 async function populate() {
   let operation, context, only, until;
 
   // check if running from terminal or is required
 
-  if (config.NODE_ENV == 'prod') {
+  if (config.NODE_ENV === 'prod') {
     throw new Error('You cannot populate under production mode!!!');
   }
 
@@ -45,45 +50,30 @@ async function populate() {
     throw new Error('Wrong context. Choose between: remote or local');
   }
 
-  // ONLY SET PROCESS WHEN USING TERMINAL, NOT FROM CODE
-  // only show this when running from terminal
-
-  if (context == 'remote') {
+  // Is this necessary?
+  if (context === 'remote') {
     process.env.MONGO_URL = process.env.POPULATE_REMOTE;
   }
 
-  if (context == 'local' || context == null) {
+  if (context === 'local' || context === null) {
     process.env.MONGO_URL = process.env.POPULATE_LOCAL || process.env.MONGO_URL;
   }
 
-  if (operation == 'add') {
+  if (operation === 'insert') {
     return await createDatabases(app, COMMUNITY, only, until);
   }
 
-  if (operation == 'remove') {
+  if (operation === 'remove') {
     return await dumpDatabases(app, COMMUNITY, only, until);
   }
 
-  if (operation == 'both') {
+  if (operation === 'both') {
     await dumpDatabases(app, COMMUNITY, only, until);
     const resp = await createDatabases(app, COMMUNITY, only, until);
     return resp;
   }
 }
 
-function setInsertPriority(obj: Record<string, unknown>) {
-  const keys = Object.keys(obj).reverse();
-
-  return zipObj(
-    keys,
-    keys.map(key => {
-      return obj[key];
-    }),
-  );
-}
-
-// give models priorities
-// it is necessary because some models needs ids (or models) from another models
 
 async function createDatabases(app, COMMUNITY, only, until) {
   // load models from data folder and sort them by priority
