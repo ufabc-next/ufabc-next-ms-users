@@ -18,6 +18,7 @@ const cachegoose = require('cachegoose');
 })();
 
 
+
 function setInsertPriority(populateFiles: Record<string, string>) {
   const files = Object.keys(populateFiles).reverse();
 
@@ -28,48 +29,55 @@ function setInsertPriority(populateFiles: Record<string, string>) {
     }),
   );
 }
-
 async function populate() {
   let until;
-  const operation = process.argv[2]
-  const only = process.argv[4]
-  // DO NOT CHANGE THIS
-  const COMMUNITY = 'test';
-  // DO NOT CHANGE THIS
 
-  if (config.NODE_ENV === 'prod') {
+  const populateOpts = {
+    app,
+    operation: process.argv[2],
+    whichModels: process.argv[3],
+    // DO NOT CHANGE THIS
+    COMMUNITY: 'test',
+    until,
+  };
+
+  if (config.NODE_ENV == 'prod') {
     throw new Error('You cannot populate under production mode!!!');
   }
 
-  if (!['insert', 'remove', 'both'].includes(operation)) {
-    throw new Error('Wrong operation. Choose between: add, remove or both');
+  if (!['insert', 'delete', 'reset'].includes(populateOpts.operation)) {
+    throw new Error('Wrong operation. Choose between: insert, delete or reset');
   }
 
-  if (operation === 'insert') {
-    return createDatabases(app, COMMUNITY, only, until);
+  console.info('Bootstrapping necessary components...');
+  console.info();
+  // Preciso prover isso la do outro lado para nao quebrar o populate
+  await app.bootstrap(['config', 'helpers', 'mongo', 'models', 'redis']);
+
+  if (populateOpts.operation === 'insert') {
+    return createDatabases(populateOpts);
   }
 
-  if (operation === 'remove') {
-    return dumpDatabases(app, COMMUNITY, only, until);
+  if (populateOpts.operation === 'delete') {
+    return dumpDatabases(populateOpts);
   }
 
-  if (operation === 'both') {
-    await dumpDatabases(app, COMMUNITY, only, until);
-    const resp = await createDatabases(app, COMMUNITY, only, until);
-    return resp;
+  if (populateOpts.operation === 'reset') {
+    await dumpDatabases(populateOpts);
+    await createDatabases(populateOpts);
   }
 }
-
-
-async function createDatabases(app, COMMUNITY, only, until) {
+async function createDatabases({ app, COMMUNITY, whichModels, until }) {
   // load models from data folder and sort them by priority
-  const data = setInsertPriority(await import('./data'));
-  // store all the ids for every model
-  const ids = {};
 
-  for (const model in data) {
-    if (only != null && !only.includes(model)) continue;
-    const generatedData = data[model];
+  const data = setInsertPriority(await import('./data'));
+
+  // store all the ids for every model
+  let ids = {};
+
+  for (let model in data) {
+    if (whichModels != null && !whichModels.includes(model)) continue;
+    let generateData = data[model];
 
     // must pass the ids to generateData(ids), because some models need it
     let dataModels = generatedData(app, ids);
@@ -82,6 +90,8 @@ async function createDatabases(app, COMMUNITY, only, until) {
         return m;
       });
     }
+  
+  
 
     let Model, resp;
 
@@ -90,12 +100,12 @@ async function createDatabases(app, COMMUNITY, only, until) {
       Model = app.models[model];
     }
 
-    const shouldIndex = Model.schema.plugins.some((p) =>
-      _.get(p.opts, 'indexAutomatically', false),
+    let shouldIndex = Model.schema.plugins.some((p) =>
+      _.get(p.opts, 'indexAutomatically', false)
     );
 
     // wait for everything being properly indexed in elasticsearch
-    const saved = dataModels.map((data) => {
+    let saved = dataModels.map((data) => {
       return new Promise(function (resolve) {
         Model.create(data, (err, model) => {
           console.log(err);
@@ -115,14 +125,18 @@ async function createDatabases(app, COMMUNITY, only, until) {
 
     // reload indexes
     if (shouldIndex) {
-      const client = app.elastic;
-      const refresh = bluebird.promisify(client.indices.refresh);
-      const exists = bluebird.promisify(client.indices.exists);
+      let client = app.elastic;
+      let refresh = bluebird.promisify(client.indices.refresh, {
+        context: client,
+      });
+      let exists = bluebird.promisify(client.indices.exists, {
+        context: client,
+      });
 
-      const indexName = model.toLowerCase();
+      let indexName = model.toLowerCase();
 
       // refresh index if exists
-      const indexExists = await exists({ index: indexName });
+      let indexExists = await exists({ index: indexName });
       if (indexExists) {
         await refresh({ index: indexName });
       }
@@ -136,31 +150,31 @@ async function createDatabases(app, COMMUNITY, only, until) {
   return ids;
 }
 
-async function dumpDatabases(app, COMMUNITY, only, until) {
+async function dumpDatabases({ app, COMMUNITY, whichModels, until }) {
   const data = setInsertPriority(await import('./data'));
 
   cachegoose.clearCache(null);
   await app.redis.cache.clear();
 
-  for (const key in data) {
-    if (only != null && !only.includes(key)) continue;
+  for (let key in data) {
+    if (whichModels != null && !whichModels.includes(key)) continue;
 
-    const Model = app.models[key];
+    let Model = app.models[key];
 
     // dump all indexes for a given model in elasticsearch
     if (_.isFunction(Model.search)) {
-      const client = app.elastic;
-      const remove = bluebird.promisify(client.indices.delete, {
+      let client = app.elastic;
+      let remove = bluebird.promisify(client.indices.delete, {
         context: client,
       });
-      const exists = bluebird.promisify(client.indices.exists, {
+      let exists = bluebird.promisify(client.indices.exists, {
         context: client,
       });
 
-      const indexName = key.toLowerCase();
+      let indexName = key.toLowerCase();
 
       // remove index if exists
-      const indexExists = await exists({ index: indexName });
+      let indexExists = await exists({ index: indexName });
       if (indexExists) {
         await remove({ index: indexName });
       }
