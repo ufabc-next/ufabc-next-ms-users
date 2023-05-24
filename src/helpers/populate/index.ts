@@ -77,42 +77,34 @@ async function populate() {
 
 async function createDatabases({ app, COMMUNITY, whichModels }: PopulateOptions) {
   // load models from data folder and sort them by priority
-  const models = setInsertPriority(await import('./data'));
+  const data = setInsertPriority(await import('./data'));
   // store all the ids for every model
-  const ids = {};
-
-  for (const model in models) {
-    // Se for passado um modelo, na cli popule e siga em frente
-    if (!whichModels.includes(model)) continue;
-    const generatedData = models[model]
-    const data = generatedData(ids);
-
-    // avoid wrong device sign up on dev enviroment
-    // this can cause Firebase FCM problems
-    if (config.NODE_ENV === 'dev' && model === 'user') {
-      data.forEach((model: any) => {
-        // perf wise is better than `delete`
-        model.devices = undefined;
-      });
-    }
-
-    // TODO: implement byQuad function and findQuad
-    let Model = models[model].byQuad(quad.findQuadKey)
-
-    if (['teachers', 'subjects', 'histories'].includes(model)) {
-      Model = models[model]
-    }
-
-    // don't even know where to start here
-    // const shouldIndex = Model.schema.plugins.some((p) =>
-    //   _.get(p.opts, 'indexAutomatically', false)
-    // );
-
-    const insertedInDatabase = data.map(value => {
-      return new Promise((resolve, reject) => {
-      })
-    })
-  }
+  let ids: Record<string,  {}> = {};
   
+  for (const model in data) {
+    if (whichModels != null && !whichModels.includes(model)) {
+      continue;
+    }
+    const generateData = data[model];
+    const dataModels = generateData(ids);
+    // Objeto com os models a serem inseridos
+    let Model = app.models[model].bySeason(app.helpers.season.findSeasonKey());
+    // acredito que seja pela ordem de dependencia
+    if (['teachers', 'subjects', 'histories'].includes(model)) {
+      Model = app.models[model];
+    }
+    const saved = dataModels.map((data) => {
+      return new Promise(function (resolve, reject) {
+        Model.create(data, (err: unknown, model: {}) => {
+          if (err) return reject(err);
+          // Save to database
+          resolve(model);
+        });
+      });
+    });
+
+    const resp = await Promise.all(saved);
+    ids[model] = resp;
+  }
   return ids;
 }
