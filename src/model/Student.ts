@@ -1,5 +1,5 @@
+import type { Student } from './zod/StudentsSchema';
 import { type Model, Schema, model } from 'mongoose';
-import { Student } from './zod/StudentsSchema';
 import { findQuarter } from '@/helpers/findQuad';
 
 type StudentModel = Model<Student, {}, {}>;
