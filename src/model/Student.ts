@@ -1,4 +1,4 @@
-import { Model, Schema, model } from 'mongoose';
+import { type Model, Schema, model } from 'mongoose';
 import { Student } from './zod/StudentsSchema';
 import { findQuarter } from '@/helpers/findQuad';
 
@@ -13,14 +13,17 @@ function setQuarter(doc: Student) {
 }
 
 studentSchema.pre<Student>('save', function () {
-  if (!this.quad) {
+  if (!this.year || !this.quad) {
     setQuarter(this);
   }
 });
 
 studentSchema.pre('findOneAndUpdate', function () {
   // TODO: ask about this _update
-  if (!this._update.season) {
+  // Learned, it's the updated object from the query
+  const docToUpdate = this.getUpdate();
+  console.log('to aqui', this._update);
+  if (!docToUpdate) {
     setQuarter(this._update);
   }
 });

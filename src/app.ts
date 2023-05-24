@@ -3,6 +3,7 @@ import { connectToMongo } from './database/connection';
 import { loggerSetup } from './config/logger';
 import nextUsageRoute from './routes/usage';
 import healthCheckRoute from './routes/health-check';
+import dummyTest from './routes/dummy';
 
 export async function buildApp() {
   const app = fastify({
@@ -16,6 +17,9 @@ export async function buildApp() {
     });
     app.register(nextUsageRoute, {
       prefix: '/stats/usage',
+    });
+    app.register(dummyTest, {
+      prefix: '/dummy',
     });
   } catch (error) {
     app.log.fatal('setup app error', error);
