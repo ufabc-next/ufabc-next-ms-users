@@ -3,6 +3,7 @@ import { Student } from './zod/StudentsSchema';
 import { findQuarter } from '@/helpers/findQuad';
 
 type StudentModel = Model<Student, {}, {}>;
+// TODO: Actually type  the returned user
 
 const studentSchema = new Schema<Student>();
 
@@ -19,12 +20,11 @@ studentSchema.pre<Student>('save', function () {
 });
 
 studentSchema.pre('findOneAndUpdate', function () {
-  // TODO: ask about this _update
-  // Learned, it's the updated object from the query
-  const docToUpdate = this.getUpdate();
-  console.log('to aqui', this._update);
-  if (!docToUpdate) {
-    setQuarter(this._update);
+  // it's equivalent to this._update, but without type errors
+  // TODO: understand types so i don't use `as`
+  const updatedStudent = this.getUpdate() as Student;
+  if (!updatedStudent?.quads) {
+    setQuarter(updatedStudent);
   }
 });
 
