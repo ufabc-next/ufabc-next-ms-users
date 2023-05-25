@@ -64,4 +64,4 @@ userSchema.pre('save', async function (this: any) {
 
 userSchema.index({ ra: -1 });
 
-export const userModel = model<User, UserModel>('User', userSchema);
+export const UserModel = model<User, UserModel>('User', userSchema);

@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { Comment } from './zod/CommentSchema';
 
 const commentSchema = new Schema<Comment>(
@@ -33,3 +33,5 @@ commentSchema.pre('save', async function () {
     }
   }
 });
+
+export const CommentModel = model('Comments', commentSchema);
