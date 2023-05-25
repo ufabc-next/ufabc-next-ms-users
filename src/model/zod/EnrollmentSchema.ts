@@ -9,6 +9,7 @@ const enrollmentSchema = z.object({
   disciplina: z.string(),
   subject: z.custom<ObjectId>(),
   campus: z.string(),
+  season: z.string(),
   turno: z.union([z.string(), z.string(), z.string()]),
   turma: z.string(),
   teoria: z.custom<ObjectId>(),
