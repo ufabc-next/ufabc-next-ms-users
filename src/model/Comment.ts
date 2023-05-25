@@ -1,15 +1,18 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { Comment } from './zod/CommentSchema';
 
 const commentSchema = new Schema<Comment>(
   {
     enrollment: {
+      type: Types.ObjectId,
       ref: 'enrollments',
     },
     teacher: {
+      type: Types.ObjectId,
       ref: 'teachers',
     },
     subject: {
+      type: Types.ObjectId,
       ref: 'subjects',
     },
   },
@@ -18,6 +21,7 @@ const commentSchema = new Schema<Comment>(
 
 commentSchema.pre('save', async function () {
   if (this.isNew) {
+    // This one here, it only work, if in your service, you create a instance of `CommentModel`
     const enrollment = await this.constructor
       .findOne({
         enrollment: this.enrollment,
