@@ -1,7 +1,6 @@
 import { config } from '@/config/env';
 import { zipObj } from 'remeda';
 
-const _ = require('lodash');
 const app = require('../app');
 const bluebird = require('bluebird');
 const cachegoose = require('cachegoose');

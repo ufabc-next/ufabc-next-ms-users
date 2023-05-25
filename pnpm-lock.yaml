@@ -27,6 +27,9 @@ devDependencies:
   '@rocketseat/eslint-config':
     specifier: ^1.2.0
     version: 1.2.0(eslint@8.37.0)(typescript@5.0.3)
+  '@types/lodash':
+    specifier: ^4.14.194
+    version: 4.14.194
   '@types/node':
     specifier: ^18.15.11
     version: 18.15.11
@@ -42,6 +45,9 @@ devDependencies:
   husky:
     specifier: 8.0.3
     version: 8.0.3
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   pino-pretty:
     specifier: ^10.0.0
     version: 10.0.0
@@ -683,6 +689,10 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/lodash@4.14.194:
+    resolution: {integrity: sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==}
     dev: true
 
   /@types/minimist@1.2.2:
