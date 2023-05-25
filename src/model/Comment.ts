@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { Comment } from './zod/CommentsSchema';
+import { Comment } from './zod/CommentSchema';
 
 const commentSchema = new Schema<Comment>(
   {

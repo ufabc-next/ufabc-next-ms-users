@@ -1,4 +1,4 @@
-import type { Student } from './zod/StudentsSchema';
+import type { Student } from './zod/StudentSchema';
 import { type Model, Schema, model } from 'mongoose';
 import { findQuarter } from '@/helpers/find-quad';
 
