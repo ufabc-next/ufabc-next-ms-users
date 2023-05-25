@@ -14,4 +14,4 @@ export const commentsSchema = z.object({
   reactionsCount: z.record(z.number()),
 });
 
-export type Comments = z.infer<typeof commentsSchema>;
+export type Comment = z.infer<typeof commentsSchema>;

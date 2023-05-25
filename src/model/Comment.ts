@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
-import { Comments } from './zod/CommentsSchema';
+import { Comment } from './zod/CommentsSchema';
 
-const commentSchema = new Schema<Comments>(
+const commentSchema = new Schema<Comment>(
   {
     enrollment: {
       ref: 'enrollments',

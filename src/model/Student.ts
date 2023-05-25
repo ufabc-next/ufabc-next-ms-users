@@ -1,6 +1,6 @@
 import type { Student } from './zod/StudentsSchema';
 import { type Model, Schema, model } from 'mongoose';
-import { findQuarter } from '@/helpers/findQuad';
+import { findQuarter } from '@/helpers/find-quad';
 
 type StudentModel = Model<Student, {}, {}>;
 // TODO: Actually type  the returned user
