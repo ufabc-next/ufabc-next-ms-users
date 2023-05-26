@@ -1,6 +1,8 @@
+import { ObjectId } from 'mongoose';
 import { z } from 'zod';
 
-const graduationSchema = z.object({
+export const graduationSchema = z.object({
+  _id: z.custom<ObjectId>(),
   locked: z.boolean().default(false),
   curso: z.string(),
   grade: z.string(),
