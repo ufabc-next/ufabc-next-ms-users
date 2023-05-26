@@ -76,7 +76,7 @@ commentSchema.static(
         createdAt: -1,
       });
     await Promise.all(
-      // for now
+      // TODO: refactor this monster
       response.map(async (r: any) => {
         r.myReactions = {
           like: !!(await ReactionModel.count({

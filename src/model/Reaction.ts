@@ -1,5 +1,6 @@
 import {
   Document,
+  Query,
   Schema,
   Types,
   isObjectIdOrHexString,
@@ -11,6 +12,8 @@ import { CommentModel } from './Comment';
 import { EnrollmentModel } from './Enrollment';
 
 type ReactionDocument = Document & Reaction;
+// I REALLY need to type this better
+type ReactionQuery = Reaction & Query<{}, {}>;
 
 const reactionSchema = new Schema<Reaction>({
   comment: {
@@ -64,5 +67,32 @@ async function validateRules(reaction: ReactionDocument) {
     }
   }
 }
+
+reactionSchema.post('save', async function () {
+  computeReactions(this);
+});
+
+reactionSchema.post('deleteOne', async function (this: ReactionQuery) {
+  computeReactions(this);
+});
+
+async function computeReactions(reaction: ReactionDocument | ReactionQuery) {
+  const commentId = reaction.comment._id || reaction.comment;
+  await CommentModel.findOneAndUpdate(
+    {
+      _id: commentId,
+    },
+    {
+      [`reactionsCount.${reaction.kind}`]:
+        // @ts-ignore the type here is `ReactionModel`
+        await reaction.constructor.countDocuments({
+          comment: commentId,
+          kind: reaction.kind,
+        }),
+    },
+  );
+}
+
+reactionSchema.index({ comment: 1, kind: 1 });
 
 export const ReactionModel = model('Reactions', reactionSchema);
