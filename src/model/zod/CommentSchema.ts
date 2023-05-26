@@ -2,6 +2,7 @@ import { ObjectId } from 'mongoose';
 import { z } from 'zod';
 
 export const commentsSchema = z.object({
+  _id: z.custom<ObjectId>(),
   comment: z.string().nonempty(),
   viewers: z.number().default(0),
   enrollment: z.object({

@@ -17,7 +17,7 @@ const deviceSchema = z.object({
   phone: z.string(),
 });
 
-const createUserSchema = z.object({
+export const createUserSchema = z.object({
   _id: z.custom<ObjectId>(),
   oauth: oAuthSchema,
   confirmed: z.boolean(),

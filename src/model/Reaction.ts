@@ -1,6 +1,5 @@
 import {
   Document,
-  FlatRecord,
   Schema,
   Types,
   isObjectIdOrHexString,
@@ -10,6 +9,8 @@ import { Reaction } from './zod/ReactionSchema';
 import { UserModel } from './User';
 import { CommentModel } from './Comment';
 import { EnrollmentModel } from './Enrollment';
+
+type ReactionDocument = Document & Reaction;
 
 const reactionSchema = new Schema<Reaction>({
   comment: {
@@ -22,7 +23,7 @@ const reactionSchema = new Schema<Reaction>({
   },
 });
 
-reactionSchema.pre('save', async function () {
+reactionSchema.pre('save', async function (this: ReactionDocument) {
   // Validate if reaction is equal
   console.log('give me refs', {
     user: this.user,
@@ -30,6 +31,7 @@ reactionSchema.pre('save', async function () {
   });
   const slug = `${this.kind}:${this.comment._id}:${this.user._id}`;
   if (this.isNew) {
+    // @ts-ignore the type here is `ReactionModel`
     const equalReaction = await this.constructor.findOne({ slug });
     if (equalReaction) {
       throw new Error(
@@ -41,9 +43,7 @@ reactionSchema.pre('save', async function () {
   await validateRules(this);
 });
 
-async function validateRules(
-  reaction: Document<unknown, {}, FlatRecord<Reaction>>,
-) {
+async function validateRules(reaction: ReactionDocument) {
   if (reaction.kind === 'recommendation') {
     const isValidId = isObjectIdOrHexString;
     const user = isValidId(reaction.user)
@@ -53,8 +53,8 @@ async function validateRules(
       ? await CommentModel.findById(reaction.comment)
       : reaction.comment;
     const isValid = await EnrollmentModel.findOne({
-      ra: user.ra,
-      $or: [{ teoria: comment.teacher }, { pratica: comment.teacher }],
+      ra: user?.ra,
+      $or: [{ teoria: comment?.teacher }, { pratica: comment?.teacher }],
     });
 
     if (!isValid) {

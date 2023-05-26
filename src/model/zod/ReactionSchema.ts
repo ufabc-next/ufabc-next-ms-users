@@ -1,14 +1,11 @@
-import { ObjectId } from 'mongoose';
 import { z } from 'zod';
+import { commentsSchema } from './CommentSchema';
+import { createUserSchema } from './UserSchema';
 
 const reactionSchema = z.object({
   kind: z.enum(['like', 'recommendation', 'star']),
-  comment: z.object({
-    _id: z.custom<ObjectId>(),
-  }),
-  user: z.object({
-    _id: z.custom<ObjectId>(),
-  }),
+  comment: commentsSchema,
+  user: createUserSchema,
   active: z.boolean().default(true),
   slug: z.string(),
 });

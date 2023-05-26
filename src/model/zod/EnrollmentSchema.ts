@@ -20,9 +20,7 @@ const enrollmentSchema = z.object({
   pratica: z.object({
     _id: z.custom<ObjectId>(),
   }),
-  mainTeacher: z.object({
-    _id: z.custom<ObjectId>(),
-  }),
+  mainTeacher: z.custom<ObjectId | {}>(),
   comments: z.enum(['teoria', 'pratica']).array(),
   // Vem do portal
   conceito: z.string(),
