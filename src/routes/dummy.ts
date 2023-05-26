@@ -14,7 +14,8 @@ const dummyTest: FastifyPluginAsync = async (app) => {
 
   app.post('/', async (request, reply) => {
     try {
-      const qTemosAqui = CommentModel;
+      const comment = new CommentModel();
+      const qTemosAqui = comment.save();
       reply.status(200).send({ data: qTemosAqui });
     } catch (error) {
       request.log.error(error, 'Quebrou');

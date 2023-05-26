@@ -21,8 +21,10 @@ const commentSchema = new Schema<Comment>(
 
 commentSchema.pre('save', async function () {
   if (this.isNew) {
-    // This one here, it only work, if in your service, you create a instance of `CommentModel`
+    //
     const enrollment = await this.constructor
+      // @ts-ignore
+      // This one here, it only work, if in your service, you create a instance of `CommentModel`
       .findOne({
         enrollment: this.enrollment,
         active: true,
@@ -37,5 +39,4 @@ commentSchema.pre('save', async function () {
     }
   }
 });
-
 export const CommentModel = model('Comments', commentSchema);

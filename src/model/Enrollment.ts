@@ -1,7 +1,9 @@
-import { Schema, model } from 'mongoose';
+import { Document, Schema, model } from 'mongoose';
 import { get } from 'lodash';
 import { Enrollment } from './zod/EnrollmentSchema';
 import { GroupModel } from './Group';
+
+type EnrollmentDocument = Document & Enrollment;
 
 const enrollmentSchema = new Schema<Enrollment>({
   subject: {
@@ -28,35 +30,36 @@ enrollmentSchema.index({
   conceito: 1,
 });
 
-function customPreMiddleware(doc: Enrollment) {
-  if ('teoria' in doc || 'teoria' in doc) {
+function setTheoryAndPractice(enrollment: EnrollmentDocument) {
+  if ('teoria' in enrollment || 'teoria' in enrollment) {
     // TODO: refactor this in the morning
-    doc.mainTeacher =
-      get(doc, 'teoria._id', doc.teoria) || get(doc, 'pratica._id', doc.teoria);
+    enrollment.mainTeacher =
+      get(enrollment, 'teoria._id', enrollment.teoria) ||
+      get(enrollment, 'pratica._id', enrollment.teoria);
   }
 }
 
-enrollmentSchema.pre('save', async function () {
-  customPreMiddleware(this);
+enrollmentSchema.pre('save', async function (this: EnrollmentDocument) {
+  setTheoryAndPractice(this);
 
   await addEnrollmentToGroup(this);
 });
 
-async function addEnrollmentToGroup(doc: Enrollment) {
+async function addEnrollmentToGroup(enrollment: EnrollmentDocument) {
   /*
    * If is a new enrollment, must create a new
    * group or insert doc.ra in group.users
    */
 
-  if (doc.mainTeacher && doc.isNew) {
+  if (enrollment.mainTeacher && enrollment.isNew) {
     await GroupModel.updateOne(
       {
-        disciplina: doc.disciplina,
-        season: doc.season,
-        mainTeacher: doc.mainTeacher,
+        disciplina: enrollment.disciplina,
+        season: enrollment.season,
+        mainTeacher: enrollment.mainTeacher,
       },
       {
-        $push: { users: doc.ra },
+        $push: { users: enrollment.ra },
       },
       {
         upsert: true,
