@@ -1,8 +1,9 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import { Group } from './zod/GroupSchema';
 
 const groupSchema = new Schema<Group>({
   mainTeacher: {
+    type: Types.ObjectId,
     ref: 'teachers',
   },
 });

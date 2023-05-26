@@ -1,8 +1,8 @@
-import { userModel } from '@/model/User';
+import { UserModel } from '@/model/User';
 
 export async function nextUsageInfo() {
   try {
-    const users = await userModel.find();
+    const users = await UserModel.find();
     return users;
   } catch (error) {
     console.error('Error fetching database', error);

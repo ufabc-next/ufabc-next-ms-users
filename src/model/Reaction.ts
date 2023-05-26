@@ -2,6 +2,7 @@ import {
   Document,
   FlatRecord,
   Schema,
+  Types,
   isObjectIdOrHexString,
   model,
 } from 'mongoose';
@@ -12,15 +13,21 @@ import { EnrollmentModel } from './Enrollment';
 
 const reactionSchema = new Schema<Reaction>({
   comment: {
+    type: Types.ObjectId,
     ref: 'comments',
   },
   user: {
+    type: Types.ObjectId,
     ref: 'users',
   },
 });
 
 reactionSchema.pre('save', async function () {
   // Validate if reaction is equal
+  console.log('give me refs', {
+    user: this.user,
+    comment: this.comment,
+  });
   const slug = `${this.kind}:${this.comment._id}:${this.user._id}`;
   if (this.isNew) {
     const equalReaction = await this.constructor.findOne({ slug });
