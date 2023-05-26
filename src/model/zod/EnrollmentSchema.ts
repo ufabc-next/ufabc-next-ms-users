@@ -7,14 +7,22 @@ const enrollmentSchema = z.object({
   identifier: z.string(),
   ra: z.number(),
   disciplina: z.string(),
-  subject: z.custom<ObjectId>(),
+  subject: z.object({
+    _id: z.custom<ObjectId>(),
+  }),
   campus: z.string(),
   season: z.string(),
   turno: z.union([z.string(), z.string(), z.string()]),
   turma: z.string(),
-  teoria: z.custom<ObjectId>(),
-  pratica: z.custom<ObjectId>(),
-  mainTeacher: z.custom<ObjectId>(),
+  teoria: z.object({
+    _id: z.custom<ObjectId>(),
+  }),
+  pratica: z.object({
+    _id: z.custom<ObjectId>(),
+  }),
+  mainTeacher: z.object({
+    _id: z.custom<ObjectId>(),
+  }),
   comments: z.enum(['teoria', 'pratica']).array(),
   // Vem do portal
   conceito: z.string(),
