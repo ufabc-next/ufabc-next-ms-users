@@ -1,4 +1,10 @@
-import { Document, FlatRecord, Schema, isObjectIdOrHexString } from 'mongoose';
+import {
+  Document,
+  FlatRecord,
+  Schema,
+  isObjectIdOrHexString,
+  model,
+} from 'mongoose';
 import { Reaction } from './zod/ReactionSchema';
 import { UserModel } from './User';
 import { CommentModel } from './Comment';
@@ -51,3 +57,5 @@ async function validateRules(
     }
   }
 }
+
+export const ReactionModel = model('Reactions', reactionSchema);
