@@ -64,4 +64,5 @@ userSchema.pre('save', async function (this: any) {
 
 userSchema.index({ ra: -1 });
 
+// eslint-disable-next-line
 export const UserModel = model<User, UserModel>('User', userSchema);
