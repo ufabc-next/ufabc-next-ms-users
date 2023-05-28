@@ -13,6 +13,7 @@
     "build": "tsup --config tsup.config.ts",
     "build:type-check": "tsc",
     "prepare": "husky install",
+    "populate": "tsx src/helpers/populate",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "test": "vitest run",

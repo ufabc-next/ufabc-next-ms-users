@@ -2,7 +2,7 @@ name: ci
 
 on:
   push:
-    branches: [main, microservice/user]
+    branches: [main, microservice/user, feat/populate-local-db]
   pull_request:
     branches: [main, microservice/user]
   workflow_dispatch:
@@ -43,7 +43,7 @@ jobs:
         with:
           version: 7.28.0
           run_install: |
-              args: [--no-frozen-lockfile]
+            args: [--no-frozen-lockfile]
       - name: lint code
         run: |
           pnpm lint
@@ -99,10 +99,9 @@ jobs:
       - name: Install pnpm and project dependency
         uses: pnpm/action-setup@v2.2.4
         with:
-           version: 7.28.0
-           run_install: |
+          version: 7.28.0
+          run_install: |
             args: [--no-frozen-lockfile]
-
 
       - name: Build and Type-Check
         run: |
