@@ -1,5 +1,6 @@
 import { statSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
+
 export async function dynamicImportAllFiles(directoryPath: string) {
   const files = await readdir(directoryPath);
   const importPromises = files.map(async (file) => {
