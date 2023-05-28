@@ -1,12 +1,12 @@
-import { config } from "@/config/env";
 import { zipObj } from "remeda";
-
-// 2 more to remove
-const app = require("../app");
-const cachegoose = require("cachegoose");
+import { config } from "@/config/env";
+import { dynamicImportAllFiles } from "../dynamic-import-all-files";
+import { currentQuad } from "../find-quad";
+import { connectToMongo } from "@/database/connection";
+import { Model } from "mongoose";
+// const cachegoose = require("cachegoose");
 
 type PopulateOptions = {
-  app: any;
   operation: string;
   whichModels: string;
   readonly COMMUNITY: "test";
@@ -23,31 +23,13 @@ type PopulateOptions = {
   }
 })();
 
-function setInsertPriority(
-  populateFiles: Record<
-    string,
-    (ids?: Record<string, unknown>) => Array<unknown>
-  >
-) {
-  const files = Object.keys(populateFiles).reverse();
-
-  return zipObj(
-    files,
-    files.map((file) => {
-      return populateFiles[file];
-    })
-  );
-}
-
-async function populate() {
-  // Figure out what this do
-
+async function populate() {  
   const populateOpts = {
-    app,
     operation: process.argv[2],
     whichModels: process.argv[3],
     // DO NOT CHANGE THIS
     COMMUNITY: "test",
+    // DO NOT CHANGE THIS
   } satisfies PopulateOptions;
 
   if (config.NODE_ENV === "prod") {
@@ -58,48 +40,69 @@ async function populate() {
     throw new Error("Wrong operation. Choose between: insert, delete or reset");
   }
 
-  console.info("Bootstrapping necessary components...");
-  console.info();
-  // Preciso prover isso la do outro lado para nao quebrar o populate
-  await app.bootstrap(["config", "helpers", "mongo", "models", "redis"]);
-
+  console.info("Running populate...");
+  // await app.bootstrap(["config", "helpers", "mongo", "models", "redis"]);
   if (populateOpts.operation === "insert") {
+    await connectToMongo();
     return createDatabases(populateOpts);
   }
-
   if (populateOpts.operation === "delete") {
+    await connectToMongo();
     // return dumpDatabases(populateOpts);
   }
-
   if (populateOpts.operation === "reset") {
+    await connectToMongo();
     // await dumpDatabases(populateOpts);
     await createDatabases(populateOpts);
   }
 }
 
 async function createDatabases({
-  app,
   COMMUNITY,
   whichModels,
 }: PopulateOptions) {
-  const data = setInsertPriority(await import("./data"));
-  for (const model in data) {
-    const ids: Record<string, unknown> = {};
+  const ids: Record<string, unknown> = {}
+  const files = await dynamicImportAllFiles("src/helpers/populate/data");
+
+  for (const { default: model } of files) {
+    const ids: Record<string, unknown> = {}
     if (whichModels != null && !whichModels.includes(model)) {
       continue;
     }
-    const setupData = data[model];
-    const ModelsValue = setupData(ids);
-    const quad = app.helpers.season.findSeasonKey();
-    const Model = app.models[model].bySeason(quad);
-    const pendingValues = ModelsValue.map(async (value) => {
+    const values = model(ids)
+    const quad = currentQuad();
+    const test = values.map(async (value: unknown) => {
       try {
-        return Model.create(value);
-      } catch (error) {
-        throw error;
+        Model.create(value)
+      } catch(error) {
+        console.log(error)
+        throw error
       }
-    });
-    const insertedValues = await Promise.all(pendingValues);
+    })
+    const insertedValues = await Promise.all(test)
+    console.log('valores inseridos', insertedValues)
     ids[model] = insertedValues;
   }
+
+  // for (const model in files) {
+  //   const ids: Record<string, unknown> = {};
+  //   if (whichModels != null && !whichModels.includes(model)) {
+  //     continue;
+  //   }
+  //   const setupfiles = files[model];
+  //   // console.log('model', model)
+  //   const ModelsValue = setupfiles(ids);
+  //   const quad = app.helpers.season.findSeasonKey();
+  //   const Model = app.models[model].bySeason(quad);
+  //   const pendingValues = ModelsValue.map(async (value: any) => {
+  //     try {
+  //       return Model.create(value);
+  //     } catch (error) {
+  //       throw error;
+  //     }
+  //   });
+  //   const insertedValues = await Promise.all(pendingValues);
+  //   ids[model] = insertedValues;
+  // }
+  
 }
