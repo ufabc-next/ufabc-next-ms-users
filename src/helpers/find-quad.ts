@@ -4,6 +4,11 @@ function findQuadFromDate(month: number) {
   if ([5, 6, 7, 8, 9].includes(month)) return 3;
 }
 
+export function currentQuad(date?: Date) {
+  const { quad, year } = findQuarter(date);
+  return `${year}:${quad}`;
+}
+
 export function findQuarter(date = new Date()) {
   const month = date.getMonth();
   const quadKey = findQuadFromDate(month);
