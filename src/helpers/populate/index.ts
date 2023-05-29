@@ -1,7 +1,8 @@
-import { config } from '@/config/env';
-import { dynamicImportAllFiles } from '../dynamic-import-all-files';
-import { connectToMongo } from '@/database/connection';
 import { Model } from 'mongoose';
+import { join } from 'node:path';
+import { config } from '@/config/env';
+import { connectToMongo } from '@/database/connection';
+import { dynamicImportAllFiles } from '../dynamic-import-all-files';
 // const cachegoose = require("cachegoose");
 
 type PopulateOptions = {
@@ -35,17 +36,18 @@ async function populate() {
   }
 
   if (!['insert', 'delete', 'reset'].includes(populateOpts.operation)) {
-    throw new Error('Wrong operation. Choose between: insert, delete or reset');
+    throw new Error('Wrong operation. Choose between: insert, delete or reset')
+      .message;
   }
 
   console.info('Running populate...');
   if (populateOpts.operation === 'insert') {
     await connectToMongo();
-    return createDatabases(populateOpts);
+    await createDatabases(populateOpts);
   }
   if (populateOpts.operation === 'delete') {
     await connectToMongo();
-    return dumpDatabases(populateOpts);
+    await dumpDatabases(populateOpts);
   }
   if (populateOpts.operation === 'reset') {
     await connectToMongo();
@@ -55,16 +57,16 @@ async function populate() {
 }
 
 async function createDatabases({ whichModels }: PopulateOptions) {
-  const files = await dynamicImportAllFiles('src/helpers/populate/data');
+  const data = join(__dirname, './data');
+  const files = await dynamicImportAllFiles(data);
   for (const { default: model } of files) {
     const ids: Record<string, unknown> = {};
-    if (whichModels != null && !whichModels.includes(model)) {
-      continue;
-    }
+
+    if (!whichModels?.includes(model)) continue;
+
     const values = model(ids);
     const test = values.map(async (value: any) => {
       try {
-        console.log(value);
         return Model.create(value);
       } catch (error) {
         console.log(error);
@@ -77,9 +79,10 @@ async function createDatabases({ whichModels }: PopulateOptions) {
 }
 
 async function dumpDatabases({ whichModels }: PopulateOptions) {
-  const models = await dynamicImportAllFiles('src/helpers/populate/data');
-  for (const model in models) {
+  const data = join(__dirname, './data');
+  const models = await dynamicImportAllFiles(data);
+  for await (const model of models) {
     if (whichModels?.includes(model)) continue;
-    await models[model].remove({});
+    await models[model.default()].remove({});
   }
 }
