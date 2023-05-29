@@ -9,8 +9,9 @@ export async function dynamicImportAllFiles(directoryPath: string) {
       const files = await import(filePath);
       return files;
     }
+    return null;
   });
   const importedModules = await Promise.all(importPromises);
   const orderedModels = importedModules.reverse();
-  return orderedModels;
+  return orderedModels.filter((models) => models !== null);
 }

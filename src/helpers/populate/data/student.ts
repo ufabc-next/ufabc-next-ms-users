@@ -1,4 +1,4 @@
-export default function () {
+export default function Student() {
   return [
     {
       _id: '5b6482562a9d8100149d3c57',

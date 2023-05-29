@@ -1,4 +1,4 @@
-export default function () {
+export default function Teacher() {
   return [
     { name: 'Abrahao Fontes Baptista' },
     { name: 'Acacio Sidinei Almeida Santos' },
