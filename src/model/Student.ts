@@ -28,7 +28,7 @@ studentSchema.pre('findOneAndUpdate', function () {
   }
 });
 
-export const studentModel = model<Student, StudentModel>(
+export const StudentModel = model<Student, StudentModel>(
   'Alunos',
   studentSchema,
 );

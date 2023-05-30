@@ -1,4 +1,4 @@
-export default function User() {
+export  function UserModel() {
   return [
     {
       confirmed: true,

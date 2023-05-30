@@ -8,4 +8,4 @@ teacherSchema.pre('save', function () {
   this.name = startCase(camelCase(this.name));
 });
 
-export const teacherModel = model('Teachers', teacherSchema);
+export const TeacherModel = model('Teachers', teacherSchema);

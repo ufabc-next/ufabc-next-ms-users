@@ -1,6 +1,6 @@
 type PopulateIds = { teachers: { _id: string }[]; subjects: { _id: string }[] };
 
-export default function Comment(ids: PopulateIds) {
+export function CommentModel(ids: PopulateIds) {
   return [
     {
       comment: 'Muito bom',

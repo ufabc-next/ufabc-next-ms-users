@@ -8,4 +8,4 @@ subjectSchema.pre('save', function () {
   this.search = startCase(camelCase(this.name));
 });
 
-export const subjectModel = model('Subjects', subjectSchema);
+export const SubjectModel = model('Subjects', subjectSchema);

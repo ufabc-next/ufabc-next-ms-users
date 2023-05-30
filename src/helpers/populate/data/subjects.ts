@@ -1,4 +1,4 @@
-export default function Subject() {
+export  function SubjectModel() {
   return [
     { name: 'Abordagens Tradicionais das Relações Internacionais' },
     { name: 'Acionamentos Elétricos' },

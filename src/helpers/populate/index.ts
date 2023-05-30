@@ -65,28 +65,25 @@ async function createDatabases({ whichModels }: PopulateOptions) {
   const Models = join(__dirname, '../../model');
   const files = await dynamicImportAllFiles(data);
   const appModels = await dynamicImportAllFiles(Models);
-  for (const { default: model } of files) {
-    const ids: Record<string, unknown> = {};
+  const ids: Record<string, unknown> = {};
+  for (const model in files) {
     if (whichModels?.includes(model)) continue;
-    const modelsToInsert = appModels[model];
-    console.log('teste', {
-      appModelsMostre: appModels,
-      filesToInsert: model,
-      mescla: modelsToInsert,
-    });
-    const values = model(ids);
-    const test = values.map(async (value: any) => {
+    const models = files[model];
+    const data = models(ids);
+    const Model = appModels[model];
+    const content = data.map(async (value: any) => {
       try {
-        return modelsToInsert.create(value);
+        console.log('Actually inserting data');
+        return Model.create(value);
       } catch (error) {
         console.log(error);
         throw error;
       }
     });
-    const insertedValues = await Promise.all(test);
-    console.log('finish insert...');
-    return (ids[model] = insertedValues);
+    await Promise.all(content);
+    // ids[model] = insertedValues;
   }
+  return ids;
 }
 
 async function dumpDatabases({ whichModels }: PopulateOptions) {
@@ -98,28 +95,4 @@ async function dumpDatabases({ whichModels }: PopulateOptions) {
   }
 }
 
-async function testePorra({ whichModels }: PopulateOptions) {
-  const data = join(__dirname, './data');
-  const Models = join(__dirname, '../../model');
-  const files = await dynamicImportAllFiles(data);
-  const appModels = await dynamicImportAllFiles(Models);
-  console.log('nomes', files);
-  for (let { default: models } of files) {
-    models = appModels;
-    console.log('fé em deus', models.default());
-    const ids: Record<string, unknown> = {};
-    if (whichModels?.includes(models)) continue;
-    const values = models(ids);
-    const test = values.map(async (value: any) => {
-      try {
-        return models.create(value);
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    });
-    const insertedValues = await Promise.all(test);
-    console.log('finish insert...');
-    return (ids[models] = insertedValues);
-  }
-}
+async function testePorra({ whichModels }: PopulateOptions) {}
