@@ -2,7 +2,7 @@ import type { Student } from './zod/StudentSchema';
 import { type Model, Schema, model } from 'mongoose';
 import { findQuarter } from '@/helpers/find-quad';
 
-type StudentModel = Model<Student, {}, {}>;
+type StudentModelType = Model<Student, {}, {}>;
 // TODO: Actually type  the returned user
 
 const studentSchema = new Schema<Student>();
@@ -28,7 +28,7 @@ studentSchema.pre('findOneAndUpdate', function () {
   }
 });
 
-export const StudentModel = model<Student, StudentModel>(
+export const StudentModel = model<Student, StudentModelType>(
   'Alunos',
   studentSchema,
 );

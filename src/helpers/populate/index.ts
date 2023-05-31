@@ -71,6 +71,7 @@ async function createDatabases({ whichModels }: PopulateOptions) {
     const models = files[model];
     const data = models(ids);
     const Model = appModels[model];
+    console.log('model', Model);
     const content = data.map(async (value: any) => {
       try {
         console.log('Actually inserting data');
@@ -86,13 +87,22 @@ async function createDatabases({ whichModels }: PopulateOptions) {
   return ids;
 }
 
-async function dumpDatabases({ whichModels }: PopulateOptions) {
-  const data = join(__dirname, './data');
-  const models = await dynamicImportAllFiles(data);
-  for await (const { default: model } of models) {
-    if (whichModels?.includes(model)) continue;
-    await models[model].remove({});
+async function dumpDatabases({ whichModels, COMMUNITY }: PopulateOptions) {
+  const Models = join(__dirname, '../../model');
+  const appModels = await dynamicImportAllFiles(Models);
+  console.log('dropping database', COMMUNITY);
+  for (const modelName in appModels) {
+    if (whichModels?.includes(modelName)) continue;
+    try {
+      const model = appModels[modelName];
+      const collection = model.collection;
+      await collection.conn.db.dropDatabase();
+    } catch (error) {
+      console.error('broken db drop', error);
+      throw error;
+    }
   }
+  console.log('dropped successfully');
 }
 
 async function testePorra({ whichModels }: PopulateOptions) {}
