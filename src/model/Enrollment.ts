@@ -22,6 +22,22 @@ const enrollmentSchema = new Schema<Enrollment>({
     type: Schema.Types.ObjectId,
     ref: 'Teachers',
   },
+
+  identifier: String,
+  ra: Number,
+  disciplina: String,
+  campus: String,
+  season: String,
+  turno: String,
+  turma: String,
+  comments: [String],
+  ca_acumulado: Number,
+  conceito: String,
+  creditos: Number,
+  cp_acumulado: Number,
+  cr_acumulado: Number,
+  year: Number,
+  quad: Number,
 });
 
 enrollmentSchema.index({ identifier: 1, ra: 1 });
@@ -66,7 +82,10 @@ async function addEnrollmentToGroup(enrollment: EnrollmentDocument) {
         $push: { users: enrollment.ra },
       },
       {
-        upsert: true,
+        // TODO: THIS IS TEMPORARY, MUST BE CHANGED
+        // TO TRUE AFTER FINDING OUT WHAT THE SEASON FIELD IS
+        strict: false,
+        upsert: false,
       },
     );
   }

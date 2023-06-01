@@ -5,7 +5,7 @@ import { findQuarter } from '@/helpers/find-quad';
 type StudentModelType = Model<Student, {}, {}>;
 // TODO: Actually type  the returned user
 
-const studentSchema = new Schema<Student>();
+const studentSchema = new Schema<Student>({});
 
 function setQuarter(doc: Student) {
   const quarter = findQuarter();

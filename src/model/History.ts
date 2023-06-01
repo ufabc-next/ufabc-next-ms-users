@@ -1,7 +1,13 @@
 import { Schema, model } from 'mongoose';
 import { History } from './zod/HistorySchema';
 
-const historySchema = new Schema<History>();
+const historySchema = new Schema<History>({
+  ra: Number,
+  disciplinas: Object,
+  coefficients: Object,
+  curso: String,
+  grade: String,
+});
 
 historySchema.index({ curso: 1, grade: 1 });
 
