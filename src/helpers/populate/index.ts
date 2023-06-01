@@ -33,7 +33,7 @@ async function populate() {
     throw new Error('You cannot populate under production mode!!!');
   }
 
-  if (!['insert', 'delete', 'reset', 'test'].includes(populateOpts.operation)) {
+  if (!['insert', 'delete', 'reset'].includes(populateOpts.operation)) {
     throw new Error('Wrong operation. Choose between: insert, delete or reset')
       .message;
   }
@@ -52,11 +52,6 @@ async function populate() {
     await connectToMongo();
     await dumpDatabases(populateOpts);
     await createDatabases(populateOpts);
-  }
-
-  if (populateOpts.operation === 'test') {
-    await connectToMongo();
-    await testePorra(populateOpts);
   }
 }
 
@@ -104,5 +99,3 @@ async function dumpDatabases({ whichModels, COMMUNITY }: PopulateOptions) {
   }
   console.log('dropped successfully');
 }
-
-async function testePorra({ whichModels }: PopulateOptions) {}
