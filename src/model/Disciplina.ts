@@ -1,4 +1,4 @@
-import { type Model, Types, Schema, model, Query } from 'mongoose';
+import { type Model, Schema, model, Query } from 'mongoose';
 import { Disciplina } from './zod/DisciplinaSchema';
 import { findQuarter } from '@/helpers/find-quad';
 
@@ -6,16 +6,16 @@ type DisciplinaModel = Model<Disciplina, {}>;
 
 const disciplinaSchema = new Schema<Disciplina, DisciplinaModel>({
   subject: {
-    type: Types.ObjectId,
-    ref: 'subjects',
+    type: Schema.Types.ObjectId,
+    ref: 'Subjects',
   },
   teoria: {
-    type: Types.ObjectId,
-    ref: 'teachers',
+    type: Schema.Types.ObjectId,
+    ref: 'Teachers',
   },
   pratica: {
-    type: Types.ObjectId,
-    ref: 'teachers',
+    type: Schema.Types.ObjectId,
+    ref: 'Teachers',
   },
 });
 

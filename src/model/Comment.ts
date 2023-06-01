@@ -1,4 +1,4 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { Comment } from './zod/CommentSchema';
 import { EnrollmentModel } from './Enrollment';
 import { ReactionModel } from './Reaction';
@@ -6,16 +6,16 @@ import { ReactionModel } from './Reaction';
 const commentSchema = new Schema<Comment>(
   {
     enrollment: {
-      type: Types.ObjectId,
-      ref: 'enrollments',
+      type: Schema.Types.ObjectId,
+      ref: 'Enrollments',
     },
     teacher: {
-      type: Types.ObjectId,
-      ref: 'teachers',
+      type: Schema.Types.ObjectId,
+      ref: 'Teachers',
     },
     subject: {
-      type: Types.ObjectId,
-      ref: 'subjects',
+      type: Schema.Types.ObjectId,
+      ref: 'Subjects',
     },
   },
   { toObject: { virtuals: true } },

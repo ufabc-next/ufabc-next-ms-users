@@ -2,7 +2,6 @@ import {
   Document,
   Query,
   Schema,
-  Types,
   isObjectIdOrHexString,
   model,
 } from 'mongoose';
@@ -17,11 +16,11 @@ type ReactionQuery = Reaction & Query<{}, {}>;
 
 const reactionSchema = new Schema<Reaction>({
   comment: {
-    type: Types.ObjectId,
-    ref: 'comments',
+    type: Schema.Types.ObjectId,
+    ref: 'Comments',
   },
   user: {
-    type: Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'users',
   },
 });

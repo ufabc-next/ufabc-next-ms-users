@@ -1,4 +1,4 @@
-import { Document, Schema, Types, model } from 'mongoose';
+import { Document, Schema, model } from 'mongoose';
 import { get } from 'lodash';
 import { Enrollment } from './zod/EnrollmentSchema';
 import { GroupModel } from './Group';
@@ -7,20 +7,20 @@ type EnrollmentDocument = Document & Enrollment;
 
 const enrollmentSchema = new Schema<Enrollment>({
   subject: {
-    type: Types.ObjectId,
-    ref: 'subjects',
+    type: Schema.Types.ObjectId,
+    ref: 'Subjects',
   },
   teoria: {
-    type: Types.ObjectId,
-    ref: 'teachers',
+    type: Schema.Types.ObjectId,
+    ref: 'Teachers',
   },
   pratica: {
-    type: Types.ObjectId,
-    ref: 'teachers',
+    type: Schema.Types.ObjectId,
+    ref: 'Teachers',
   },
   mainTeacher: {
-    type: Types.ObjectId,
-    ref: 'teachers',
+    type: Schema.Types.ObjectId,
+    ref: 'Teachers',
   },
 });
 

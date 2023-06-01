@@ -1,14 +1,14 @@
 import type { GraduationSubject } from './zod/GraduationSubjectSchema';
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const graduationSubjectSchema = new Schema<GraduationSubject>({
   subject: {
-    type: Types.ObjectId,
-    ref: 'subjects',
+    type: Schema.Types.ObjectId,
+    ref: 'Subjects',
   },
   graduation: {
-    type: Types.ObjectId,
-    ref: 'graduation',
+    type: Schema.Types.ObjectId,
+    ref: 'Graduations',
   },
 });
 
