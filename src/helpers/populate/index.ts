@@ -60,24 +60,23 @@ async function createDatabases({ whichModels }: PopulateOptions) {
   const Models = join(__dirname, '../../model');
   const files = await dynamicImportAllFiles(data);
   const appModels = await dynamicImportAllFiles(Models);
-  const ids: Record<string, unknown> = {};
+  const ids: Record<string, string[]> = {};
   for (const model in files) {
     if (whichModels?.includes(model)) continue;
     const models = files[model];
     const data = models(ids);
     const Model = appModels[model];
-    console.log('model', Model);
+    ids[model] = [];
     const content = data.map(async (value: any) => {
       try {
-        console.log('Actually inserting data');
-        return Model.create(value);
+        const createdInstance = await Model.create(value);
+        ids[model].push(createdInstance._id.toString());
       } catch (error) {
         console.log(error);
         throw error;
       }
     });
     await Promise.all(content);
-    // ids[model] = insertedValues;
   }
   return ids;
 }
