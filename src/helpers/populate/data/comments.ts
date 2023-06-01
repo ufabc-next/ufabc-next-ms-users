@@ -1,13 +1,13 @@
-type PopulateIds = { teachers: { _id: string }[]; subjects: { _id: string }[] };
+type PopulateIds = { TeacherModel: string[]; SubjectModel: string[] };
 
 export function CommentModel(ids: PopulateIds) {
   return [
     {
       comment: 'Muito bom',
-      teacher: ids.teachers[0]._id,
+      teacher: ids.TeacherModel[0],
       type: 'teoria',
       enrollment: '000000000000000000000001',
-      subject: ids.subjects[0]._id,
+      subject: ids.SubjectModel[0],
       ra: 11201822483,
     },
 
@@ -15,17 +15,17 @@ export function CommentModel(ids: PopulateIds) {
       comment: 'Morte à geometria analitica e vetores',
       type: 'teoria',
       enrollment: '000000000000000000000002',
-      subject: ids.subjects[392]._id,
-      teacher: ids.subjects[101]._id,
+      subject: ids.SubjectModel[392],
+      teacher: ids.SubjectModel[101],
       ra: 11201822479,
     },
 
     {
       comment: 'Só alegria',
-      teacher: ids.teachers[0]._id,
+      teacher: ids.TeacherModel[0],
       type: 'teoria',
       enrollment: '000000000000000000000007',
-      subject: ids.subjects[0]._id,
+      subject: ids.SubjectModel[0],
       ra: 11201822481,
     },
   ];
