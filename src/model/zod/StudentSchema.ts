@@ -7,7 +7,7 @@ export const courseSchema = z.object({
   cp: z.number(),
   cr: z.number(),
   ind_afinidade: z.number(),
-  turno: z.union([z.string(), z.string(), z.string()]),
+  turno: z.enum('Noturno', 'Matutino'),
 });
 
 export const StudentSchema = z.object({

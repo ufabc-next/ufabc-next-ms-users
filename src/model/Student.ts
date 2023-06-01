@@ -5,7 +5,28 @@ import { findQuarter } from '@/helpers/find-quad';
 type StudentModelType = Model<Student, {}, {}>;
 // TODO: Actually type  the returned user
 
-const studentSchema = new Schema<Student>();
+const studentSchema = new Schema<Student>({
+  ra: { type: Number },
+  login: { type: String },
+  aluno_id: { type: Number },
+  quad: { type: Number },
+  year: { type: Number },
+  quads: { type: Number },
+  cursos: [
+    {
+      id_curso: { type: Number },
+      nome_curso: { type: String },
+      cp: { type: Number },
+      cr: { type: Number },
+      ind_afinidade: { type: Number },
+      turno: {
+        type: String,
+        required: true,
+        enum: ['Matutino', 'Noturno', 'vespertino'],
+      },
+    },
+  ],
+});
 
 function setQuarter(doc: Student) {
   const quarter = findQuarter();
