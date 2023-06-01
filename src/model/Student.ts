@@ -6,23 +6,23 @@ type StudentModelType = Model<Student, {}, {}>;
 // TODO: Actually type  the returned user
 
 const studentSchema = new Schema<Student>({
-  ra: { type: Number, required: true, unique: true },
-  login: { type: String, required: true, unique: true },
-  aluno_id: { type: Number, required: true, unique: true },
-  quad: { type: Number, required: true },
-  year: { type: Number, required: true },
-  quads: { type: Number, required: true },
+  ra: { type: Number },
+  login: { type: String },
+  aluno_id: { type: Number },
+  quad: { type: Number },
+  year: { type: Number },
+  quads: { type: Number },
   cursos: [
     {
-      id_curso: { type: Number, required: true },
-      nome_curso: { type: String, required: true },
-      cp: { type: Number, required: true },
-      cr: { type: Number, required: true },
-      ind_afinidade: { type: Number, required: true },
+      id_curso: { type: Number },
+      nome_curso: { type: String },
+      cp: { type: Number },
+      cr: { type: Number },
+      ind_afinidade: { type: Number },
       turno: {
         type: String,
         required: true,
-        enum: ['matutino', 'noturno', 'vespertino'],
+        enum: ['Matutino', 'Noturno', 'vespertino'],
       },
     },
   ],
