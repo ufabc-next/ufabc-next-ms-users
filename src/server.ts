@@ -1,5 +1,5 @@
 import { buildApp } from '@/app';
-import { config } from '@/config/env';
+import { config } from '@/config/secret';
 
 async function start() {
   const app = await buildApp();

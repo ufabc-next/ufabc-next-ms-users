@@ -1,4 +1,4 @@
-import { config } from '@/config/env';
+import { config } from '@/config/secret';
 import { connect } from 'mongoose';
 
 // TODO: MIgrate to a plugin so i can log stuff

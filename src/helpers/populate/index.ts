@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { config } from '@/config/env';
+import { config } from '@/config/secret';
 import { connectToMongo } from '@/database/connection';
 import { dynamicImportAllFiles } from '../dynamic-import-all-files';
 
@@ -43,6 +43,7 @@ async function populate() {
     await connectToMongo();
     console.log('inserting...');
     await createDatabases(populateOpts);
+    console.log(`finished inserting in ${populateOpts.COMMUNITY}...`);
   }
   if (populateOpts.operation === 'delete') {
     await connectToMongo();
