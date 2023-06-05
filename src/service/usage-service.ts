@@ -41,36 +41,50 @@ export async function nextUsageInfo() {
     { $group: { _id: null, total: { $sum: 1 } } },
   ];
 
+  const disciplinaStatsFacetQuery = [
+    {
+      $facet: {
+        teachers: teacherAggregationQueryCount,
+        subjects: subjectsAggregationQueryCount,
+        studentTotal: studentAggregationQueryCount,
+      },
+    },
+    {
+      $addFields: {
+        teachers: { $ifNull: [{ $arrayElemAt: ['$teachers.total', 0] }, 0] },
+        totalAlunos: {
+          $ifNull: [{ $arrayElemAt: ['$totalAlunos.total', 0] }, 0],
+        },
+        subjects: { $ifNull: [{ $arrayElemAt: ['$subjects.total', 0] }, 0] },
+      },
+    },
+  ];
+
   try {
-    const disciplinaStats = await DisciplinaModel.aggregate([
-      {
-        $facet: {
-          teachers: teacherAggregationQueryCount,
-          subjects: subjectsAggregationQueryCount,
-          studentTotal: studentAggregationQueryCount,
-        },
-      },
-      {
-        $addFields: {
-          teachers: { $ifNull: [{ $arrayElemAt: ['$teachers.total', 0] }, 0] },
-          totalAlunos: {
-            $ifNull: [{ $arrayElemAt: ['$totalAlunos.total', 0] }, 0],
-          },
-          subjects: { $ifNull: [{ $arrayElemAt: ['$subjects.total', 0] }, 0] },
-        },
-      },
-    ]);
+    const [users, currentStudents, comments, enrollments, [disciplinaStats]] =
+      await Promise.all([
+        UserModel.count({}),
+        StudentModel.count({}),
+        CommentModel.count({}),
+        EnrollmentModel.count({
+          conceito: { $in: ['A', 'B', 'C', 'D', '0', 'F'] },
+        }),
+        DisciplinaModel.aggregate(disciplinaStatsFacetQuery),
+      ]);
 
-    const generalStats = {
-      users: await UserModel.count({}),
-      currentStudents: await StudentModel.count({}),
-      comments: await CommentModel.count({}),
-      enrollments: await EnrollmentModel.count({
-        conceito: { $in: ['A', 'B', 'C', 'D', '0', 'F'] },
-      }),
+    const [allStudents] = disciplinaStats.studentTotal.map(
+      ({ total }: { total: number; _id: null }) => total,
+    );
+
+    return {
+      teachers: disciplinaStats.teachers,
+      studentTotal: allStudents,
+      subjects: disciplinaStats.subjects,
+      users,
+      currentStudents,
+      comments,
+      enrollments,
     };
-
-    return Object.assign({}, disciplinaStats[0], generalStats);
   } catch (error) {
     console.error('Error fetching database', error);
     throw error;
