@@ -3,7 +3,6 @@ import { connectToMongo } from './database/connection';
 import { loggerSetup } from './config/logger';
 import nextUsageRoute from './routes/usage';
 import healthCheckRoute from './routes/health-check';
-import dummyTest from './routes/dummy';
 
 export async function buildApp() {
   const app = fastify({
@@ -12,14 +11,12 @@ export async function buildApp() {
 
   try {
     await connectToMongo();
+    // TODO: Implement @fastify/autoload
     app.register(healthCheckRoute, {
-      prefix: '/healthCheck',
+      prefix: '/v2/healthCheck',
     });
     app.register(nextUsageRoute, {
-      prefix: '/stats/usage',
-    });
-    app.register(dummyTest, {
-      prefix: '/dummy',
+      prefix: '/v2/stats/usage',
     });
   } catch (error) {
     app.log.fatal('setup app error', error);
