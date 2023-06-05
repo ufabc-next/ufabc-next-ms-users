@@ -8,8 +8,12 @@ const options = {
 } satisfies PrettyOptions;
 
 export const loggerSetup = {
-  transport: {
-    target: 'pino-pretty',
-    options,
+  dev: {
+    transport: {
+      target: 'pino-pretty',
+      options,
+    },
   },
+  prod: true,
+  test: false,
 };

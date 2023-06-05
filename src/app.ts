@@ -1,12 +1,13 @@
 import fastify from 'fastify';
 import { connectToMongo } from './database/connection';
-import { loggerSetup } from './config/logger';
 import nextUsageRoute from './routes/usage';
 import healthCheckRoute from './routes/health-check';
+import { loggerSetup } from './config/logger';
+import { config } from './config/secret';
 
 export async function buildApp() {
   const app = fastify({
-    logger: loggerSetup,
+    logger: loggerSetup[config.NODE_ENV] ?? true,
   });
 
   try {
