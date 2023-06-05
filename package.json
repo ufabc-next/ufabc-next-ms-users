@@ -47,6 +47,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
+    "@fastify/redis": "^6.1.1",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
     "mongoose": "^7.1.1",
