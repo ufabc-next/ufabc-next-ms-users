@@ -19,7 +19,7 @@
   },
   "overrides": [
     {
-      "files": ["src/plugins/**/*"],
+      "files": ["src/plugins/**/*", "src/routes/**"],
       "rules": {
         "import/no-default-export": "off"
       }
