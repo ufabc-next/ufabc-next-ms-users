@@ -44,7 +44,7 @@
     "tsup": "^6.7.0",
     "tsx": "^3.12.6",
     "typescript": "^5.0.3",
-    "vitest": "^0.30.0"
+    "vitest": "^0.31.0"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
