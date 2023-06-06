@@ -1,8 +1,8 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mongodb:
-    image: mongo:5.0.17
+    image: mongo:latest
     env_file:
       - .env
     container_name: $MONGODB_NAME
@@ -13,4 +13,11 @@ services:
       MONGO_INITDB_ROOT_USERNAME: $MONGODB_USER
       MONGO_INITDB_ROOT_PASSWORD: $MONGODB_PASSWORD
       MONGO_INITDB_DATABASE: $MONGODB_NAME
-    
+  redis:
+    image: redis:latest
+    env_file:
+      - .env
+    container_name: $REDIS_NAME
+    restart: always
+    ports:
+      - "$REDIS_PORT:$REDIS_PORT"
