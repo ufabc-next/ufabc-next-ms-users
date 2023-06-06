@@ -4,16 +4,14 @@ import { UserModel } from '@/model/User';
 import { StudentModel } from '@/model/Student';
 import { CommentModel } from '@/model/Comment';
 import { EnrollmentModel } from '@/model/Enrollment';
-import { buildApp } from '@/app';
+import { app } from '@/app';
 
 export async function nextUsageInfo() {
-  const app = await buildApp();
-
   const CACHE_KEY = `usage-service`;
-
   const cached = await app.redis.get(CACHE_KEY);
-
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
 
   const teacherAggregationQueryCount: PipelineStage.FacetPipelineStage[] = [
     {
@@ -106,7 +104,7 @@ export async function nextUsageInfo() {
       enrollments,
     };
   } catch (error) {
-    console.error('Error fetching database', error);
+    app.log.error('Error fetching database', error);
     throw error;
   }
 }
