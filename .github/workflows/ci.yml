@@ -41,9 +41,8 @@ jobs:
       - name: Install pnpm and project dependency
         uses: pnpm/action-setup@v2.2.4
         with:
-          version: 8.1.0
-          run_install: |
-            args: [--no-frozen-lockfile]
+          version: 8
+          run_install: null
       - name: lint code
         run: |
           pnpm lint
@@ -69,9 +68,8 @@ jobs:
       - name: Install pnpm and project dependency
         uses: pnpm/action-setup@v2.2.4
         with:
-          version: 8.1.0
-          run_install: |
-            args: [--no-frozen-lockfile]
+          version: 8
+          run_install: null
 
       - name: Run tests
         # TODO: create a test:ci script
@@ -99,9 +97,8 @@ jobs:
       - name: Install pnpm and project dependency
         uses: pnpm/action-setup@v2.2.4
         with:
-          version: 8.1.0
-          run_install: |
-            args: [--no-frozen-lockfile]
+          version: 8
+          run_install: null
 
       - name: Build and Type-Check
         run: |
