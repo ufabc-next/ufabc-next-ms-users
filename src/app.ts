@@ -7,12 +7,12 @@ import { config } from './config/secret';
 import nextUsageRoute from './routes/usage';
 import healthCheckRoute from './routes/health-check';
 
-// is a build function necessary? need help to see alternatives
+export let app = fastify();
+
 export async function buildApp() {
-  const app = fastify({
+  app = fastify({
     logger: loggerSetup[config.NODE_ENV] ?? true,
   });
-
   try {
     app.register(fastifyRedis, {
       host: config.HOST,

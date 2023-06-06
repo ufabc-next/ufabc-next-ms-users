@@ -1,8 +1,9 @@
-import { buildApp } from '@/app';
+import { buildApp, app } from '@/app';
 import { config } from '@/config/secret';
 
 async function start() {
-  const app = await buildApp();
+  await buildApp();
+
   try {
     if (config.NODE_ENV === 'dev') {
       app.log.info(`registered routes ${app.printRoutes()}`);
