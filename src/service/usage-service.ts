@@ -7,6 +7,14 @@ import { EnrollmentModel } from '@/model/Enrollment';
 import { buildApp } from '@/app';
 
 export async function nextUsageInfo() {
+  const app = await buildApp();
+
+  const CACHE_KEY = `usage-service`;
+
+  const cached = await app.redis.get(CACHE_KEY);
+
+  if (cached) return cached;
+
   const teacherAggregationQueryCount: PipelineStage.FacetPipelineStage[] = [
     {
       $group: {
@@ -58,7 +66,6 @@ export async function nextUsageInfo() {
   ];
 
   try {
-    const app = await buildApp();
     const [users, currentStudents, comments, enrollments, [disciplinaStats]] =
       await Promise.all([
         UserModel.count({}),
@@ -74,8 +81,6 @@ export async function nextUsageInfo() {
       ({ total }: { total: number; _id: null }) => total,
     );
 
-    const CACHE_KEY = `usage-service`;
-
     await app.redis.set(
       CACHE_KEY,
       JSON.stringify({
@@ -90,10 +95,6 @@ export async function nextUsageInfo() {
       'EX',
       60 * 60,
     );
-
-    const cached = await app.redis.get(CACHE_KEY);
-
-    if (cached) return cached;
 
     return {
       teachers: disciplinaStats.teachers,
