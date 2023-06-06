@@ -1,16 +1,19 @@
 import type { FastifyPluginAsync } from 'fastify';
-import mongoose from 'mongoose';
+import { STATES, connection } from 'mongoose';
 
-const healthCheckRoute: FastifyPluginAsync = async (fastify, opts) => {
-  fastify.get('/', async (request, reply) => {
+const healthCheckRoute: FastifyPluginAsync = async (app, opts) => {
+  app.get('/', async (request, reply) => {
     try {
-      const isConnected = `${mongoose.STATES[mongoose.connection.readyState]}`;
+      const isConnected = `${STATES[connection.readyState]}`;
+      const isConnectedToRedis =
+        (await app.redis.ping()) === 'PONG' ? 'Connected' : null;
       return reply.code(200).send({
         msg: 'All good',
-        dbStatus: isConnected,
+        mongoStatus: isConnected,
+        redisStatus: isConnectedToRedis,
       });
     } catch (error: unknown) {
-      fastify.log.error(error, 'HealthCheck');
+      app.log.error(error, 'HealthCheck');
     }
   });
 };
