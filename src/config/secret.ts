@@ -13,13 +13,16 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(5000),
   HOST: z.string().min(4).default('localhost'),
   // MONGODB
-  MONGODB_PORT: z.coerce.number().default(27017),
   MONGODB_USER: z.string(),
+  MONGODB_PORT: z.coerce.number().default(27017),
   MONGODB_PASSWORD: z.string().min(6),
-  // Database name
   MONGODB_NAME: z.string(),
-  // Db url
-  CONNECTION_URL: z.string(),
+  // Redis
+  REDIS_PORT: z.coerce.number().default(6379),
+  REDIS_PASSWORD: z.string().min(8),
+  // Docker URL
+  MONGODB_CONNECTION_URL: z.string(),
+  REDIS_CONNECTION_URL: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);
