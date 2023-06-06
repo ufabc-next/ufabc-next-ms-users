@@ -5,11 +5,12 @@ import healthCheckRoute from './routes/health-check';
 import { loggerSetup } from './config/logger';
 import { config } from './config/secret';
 
+export let app = fastify();
+
 export async function buildApp() {
-  const app = fastify({
+  app = fastify({
     logger: loggerSetup[config.NODE_ENV] ?? true,
   });
-
   try {
     await connectToMongo();
     // TODO: Implement @fastify/autoload
