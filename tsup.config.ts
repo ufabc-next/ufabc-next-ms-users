@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup';
 
 // eslint-disable-next-line
 export default defineConfig({
-  entry: ['src/**/*.ts', '!src/helpers/types', '!src/helpers/populate'],
+  entry: ['src/**/*.ts', '!src/@types'],
   target: ['node16'],
   // optional to be discussed
   // minify: true,

@@ -10,7 +10,7 @@
   "scripts": {
     "start": "tsx src/server.ts",
     "start:watch": "tsx watch src/server.ts",
-    "start:prod": "node dist/server.js",
+    "start:prod": "NODE_ENV=prod node dist/server.js",
     "build": "tsup --config tsup.config.ts",
     "build:type-check": "tsc",
     "prepare": "husky install",

@@ -1,7 +1,7 @@
 import { Model, ObjectId, Schema, model } from 'mongoose';
 import { uniqBy } from 'remeda';
 import { User } from './zod/UserSchema';
-import { Unpacked } from '@/helpers/types/unpacked';
+import { Unpacked } from 'types/unpacked';
 
 // TODO: Create the methods for email Confirmation and generateJWT
 
