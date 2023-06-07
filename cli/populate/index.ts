@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { config } from '@/config/secret';
 import { connectToMongo } from '@/database/connection';
-import { dynamicImportAllFiles } from '../dynamic-import-all-files';
+import { dynamicImportAllFiles } from './dynamic-import-all-files';
 
 type PopulateOptions = {
   operation: string;
@@ -58,7 +58,7 @@ async function populate() {
 
 async function createDatabases({ whichModels }: PopulateOptions) {
   const data = join(__dirname, './data');
-  const Models = join(__dirname, '../../model');
+  const Models = join(__dirname, '../../src/model');
   const files = await dynamicImportAllFiles(data);
   const appModels = await dynamicImportAllFiles(Models);
   const ids: Record<string, string[]> = {};
@@ -83,7 +83,7 @@ async function createDatabases({ whichModels }: PopulateOptions) {
 }
 
 async function dumpDatabases({ whichModels, COMMUNITY }: PopulateOptions) {
-  const Models = join(__dirname, '../../model');
+  const Models = join(__dirname, '../../src/model');
   const appModels = await dynamicImportAllFiles(Models);
   console.log('dropping database', COMMUNITY);
   for (const modelName in appModels) {
