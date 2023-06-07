@@ -1,19 +1,16 @@
-import fastify from 'fastify';
+import { fastify, type FastifyServerOptions } from 'fastify';
 import { fastifyAutoload } from '@fastify/autoload';
 import { fastifyRedis } from '@fastify/redis';
 import { fastifyJwt } from '@fastify/jwt';
 
 import { join } from 'node:path';
-import { loggerSetup } from './config/logger';
+
 import { config } from './config/secret';
 import { nextUsageRoute } from './modules/nextUsage';
 import { healthCheckRoute } from './modules/healthCheck';
-export let app = fastify();
 
-export async function buildApp() {
-  app = fastify({
-    logger: loggerSetup[config.NODE_ENV] ?? true,
-  });
+export async function buildApp(opts: FastifyServerOptions = {}) {
+  const app = fastify(opts);
   try {
     app.register(fastifyAutoload, {
       dir: join(__dirname, 'plugins'),
@@ -27,7 +24,6 @@ export async function buildApp() {
     app.register(fastifyJwt, {
       secret: config.JWT_SECRET,
     });
-    // TODO: Implement @fastify/autoload
     app.register(healthCheckRoute, { prefix: '/v2' });
     app.register(nextUsageRoute, { prefix: '/v2' });
   } catch (error) {
