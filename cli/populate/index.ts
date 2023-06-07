@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { config } from '@/config/secret';
-import { connectToMongo } from '@/database/connection';
+import { connectToMongo } from '../database/connection';
 import { dynamicImportAllFiles } from './dynamic-import-all-files';
 
 type PopulateOptions = {
