@@ -1,8 +1,8 @@
-import type { FastifyPluginAsync } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import { STATES, connection } from 'mongoose';
 
-const healthCheckRoute: FastifyPluginAsync = async (app, opts) => {
-  app.get('/', async (request, reply) => {
+export async function healthCheckRoute(app: FastifyInstance) {
+  app.get('/healthCheck', async (request, reply) => {
     try {
       const isConnected = `${STATES[connection.readyState]}`;
       const isConnectedToRedis =
@@ -16,7 +16,4 @@ const healthCheckRoute: FastifyPluginAsync = async (app, opts) => {
       app.log.error(error, 'HealthCheck');
     }
   });
-};
-
-// eslint-disable-next-line
-export default healthCheckRoute;
+}

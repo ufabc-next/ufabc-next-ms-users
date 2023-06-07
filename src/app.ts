@@ -6,8 +6,7 @@ import { connectToMongo } from './database/connection';
 import { loggerSetup } from './config/logger';
 import { config } from './config/secret';
 import { nextUsageRoute } from './modules/nextUsage';
-import healthCheckRoute from './routes/health-check';
-
+import { healthCheckRoute } from './modules/healthCheck';
 export let app = fastify();
 
 export async function buildApp() {
