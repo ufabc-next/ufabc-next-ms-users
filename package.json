@@ -3,13 +3,14 @@
   "version": "0.0.4",
   "description": "Users microservice for the ufabc-next backend",
   "engines": {
-    "pnpm": ">8.1.0",
-    "node": ">16.14.0"
+    "pnpm": ">=8.1.0",
+    "node": ">=18.16.0"
   },
   "main": "dist/server.js",
   "scripts": {
     "start": "tsx src/server.ts",
     "start:watch": "tsx watch src/server.ts",
+    "start:prod": "node dist/server.js",
     "build": "tsup --config tsup.config.ts",
     "build:type-check": "tsc",
     "prepare": "husky install",
@@ -47,6 +48,7 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
+    "@fastify/jwt": "^7.0.0",
     "@fastify/redis": "^6.1.1",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",

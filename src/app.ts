@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import { fastifyRedis } from '@fastify/redis';
+import { fastifyJwt } from '@fastify/jwt';
 
 import { connectToMongo } from './database/connection';
 import { loggerSetup } from './config/logger';
@@ -21,6 +22,9 @@ export async function buildApp() {
       family: 4, // IPV4,
     });
     await connectToMongo();
+    app.register(fastifyJwt, {
+      secret: config.JWT_SECRET
+    })
     // TODO: Implement @fastify/autoload
     app.register(healthCheckRoute, {
       prefix: '/v2/healthCheck',
