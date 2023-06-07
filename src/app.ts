@@ -1,8 +1,9 @@
 import fastify from 'fastify';
+import { fastifyAutoload } from '@fastify/autoload';
 import { fastifyRedis } from '@fastify/redis';
 import { fastifyJwt } from '@fastify/jwt';
 
-import { connectToMongo } from './database/connection';
+import { join } from 'node:path';
 import { loggerSetup } from './config/logger';
 import { config } from './config/secret';
 import { nextUsageRoute } from './modules/nextUsage';
@@ -14,14 +15,15 @@ export async function buildApp() {
     logger: loggerSetup[config.NODE_ENV] ?? true,
   });
   try {
+    app.register(fastifyAutoload, {
+      dir: join(__dirname, 'plugins'),
+    });
     app.register(fastifyRedis, {
       host: config.HOST,
       password: config.REDIS_PASSWORD,
       port: config.REDIS_PORT,
       family: 4, // IPV4,
     });
-    // will turn this in a plugin
-    await connectToMongo();
     app.register(fastifyJwt, {
       secret: config.JWT_SECRET,
     });
