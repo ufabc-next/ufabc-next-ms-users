@@ -4,15 +4,8 @@ import { UserModel } from '@/model/User';
 import { StudentModel } from '@/model/Student';
 import { CommentModel } from '@/model/Comment';
 import { EnrollmentModel } from '@/model/Enrollment';
-import { app } from '@/app';
 
 export async function nextUsageInfo() {
-  const CACHE_KEY = `usage-service`;
-  const cached = await app.redis.get(CACHE_KEY);
-  if (cached) {
-    return cached;
-  }
-
   const teacherAggregationQueryCount: PipelineStage.FacetPipelineStage[] = [
     {
       $group: {
@@ -79,21 +72,6 @@ export async function nextUsageInfo() {
       ({ total }: { total: number; _id: null }) => total,
     );
 
-    await app.redis.set(
-      CACHE_KEY,
-      JSON.stringify({
-        teachers: disciplinaStats.teachers,
-        studentTotal: allStudents,
-        subjects: disciplinaStats.subjects,
-        users,
-        currentStudents,
-        comments,
-        enrollments,
-      }),
-      'EX',
-      60 * 60,
-    );
-
     return {
       teachers: disciplinaStats.teachers,
       studentTotal: allStudents,
@@ -104,7 +82,7 @@ export async function nextUsageInfo() {
       enrollments,
     };
   } catch (error) {
-    app.log.error(`Error in Next Usage Service ${error}`);
+    console.error(`Error in Next Usage Service ${error}`);
     throw error;
   }
 }
