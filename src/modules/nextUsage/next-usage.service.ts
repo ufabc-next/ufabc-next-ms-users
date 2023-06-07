@@ -1,4 +1,4 @@
-import { PipelineStage } from 'mongoose';
+import type { PipelineStage } from 'mongoose';
 import { DisciplinaModel } from '@/model/Disciplina';
 import { UserModel } from '@/model/User';
 import { StudentModel } from '@/model/Student';
@@ -104,7 +104,7 @@ export async function nextUsageInfo() {
       enrollments,
     };
   } catch (error) {
-    app.log.error('Error fetching database', error);
+    app.log.error(`Error in Next Usage Service ${error}`);
     throw error;
   }
 }

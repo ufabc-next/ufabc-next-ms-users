@@ -1,4 +1,4 @@
-import { nextUsageInfo } from '@/service/usage-service';
+import { nextUsageInfo } from './next-usage.service';
 
 export async function getNextUsage() {
   const currentNextUsage = await nextUsageInfo();

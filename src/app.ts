@@ -5,7 +5,7 @@ import { fastifyJwt } from '@fastify/jwt';
 import { connectToMongo } from './database/connection';
 import { loggerSetup } from './config/logger';
 import { config } from './config/secret';
-import nextUsageRoute from './routes/usage';
+import { nextUsageRoute } from './modules/nextUsage';
 import healthCheckRoute from './routes/health-check';
 
 export let app = fastify();
@@ -21,17 +21,14 @@ export async function buildApp() {
       port: config.REDIS_PORT,
       family: 4, // IPV4,
     });
+    // will turn this in a plugin
     await connectToMongo();
     app.register(fastifyJwt, {
-      secret: config.JWT_SECRET
-    })
+      secret: config.JWT_SECRET,
+    });
     // TODO: Implement @fastify/autoload
-    app.register(healthCheckRoute, {
-      prefix: '/v2/healthCheck',
-    });
-    app.register(nextUsageRoute, {
-      prefix: '/v2/stats/usage',
-    });
+    app.register(healthCheckRoute, { prefix: '/v2' });
+    app.register(nextUsageRoute, { prefix: '/v2' });
   } catch (error) {
     app.log.fatal('setup app error', error);
     throw error;
