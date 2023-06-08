@@ -3,17 +3,18 @@
   "version": "0.0.4",
   "description": "Users microservice for the ufabc-next backend",
   "engines": {
-    "pnpm": ">8.1.0",
-    "node": ">16.14.0"
+    "pnpm": ">=8.1.0",
+    "node": ">=18.16.0"
   },
   "main": "dist/server.js",
   "scripts": {
     "start": "tsx src/server.ts",
     "start:watch": "tsx watch src/server.ts",
+    "start:prod": "NODE_ENV=prod node dist/server.js",
     "build": "tsup --config tsup.config.ts",
     "build:type-check": "tsc",
     "prepare": "husky install",
-    "populate": "tsx src/helpers/populate",
+    "populate": "tsx cli/populate",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "test": "vitest run",
@@ -47,9 +48,13 @@
     "vitest": "^0.31.0"
   },
   "dependencies": {
+    "@fastify/autoload": "^5.7.1",
+    "@fastify/jwt": "^7.0.0",
     "@fastify/redis": "^6.1.1",
+    "close-with-grace": "^1.2.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
+    "fastify-plugin": "^4.5.0",
     "mongoose": "^7.1.1",
     "remeda": "^1.14.0",
     "zod": "^3.21.4"

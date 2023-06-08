@@ -10,7 +10,8 @@
     "strict": true,
     // if it breaks remove
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "types/*": ["./src/@types/*"]
     },
     "types": ["vitest/globals", "node"],    
     // Folder for type augmentation
