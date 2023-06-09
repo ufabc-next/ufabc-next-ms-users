@@ -1,11 +1,12 @@
+import { FastifyServerOptions } from 'fastify';
 import closeWithGrace from 'close-with-grace';
-import { buildApp } from '@/app';
-import { config } from '@/config/secret';
+import { buildApp } from './app';
+import { config } from './config/secret';
 import { loggerSetup } from './config/logger';
 
 const appOpts = {
   logger: loggerSetup[config.NODE_ENV] ?? true,
-};
+} satisfies FastifyServerOptions;
 
 async function start() {
   const app = await buildApp(appOpts);

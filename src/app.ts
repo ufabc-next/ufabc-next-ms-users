@@ -1,7 +1,6 @@
 import { fastify, type FastifyServerOptions } from 'fastify';
 import { fastifyAutoload } from '@fastify/autoload';
 import { fastifyRedis } from '@fastify/redis';
-import { fastifyJwt } from '@fastify/jwt';
 
 import { join } from 'node:path';
 
@@ -20,9 +19,6 @@ export async function buildApp(opts: FastifyServerOptions = {}) {
       password: config.REDIS_PASSWORD,
       port: config.REDIS_PORT,
       family: 4, // IPV4,
-    });
-    app.register(fastifyJwt, {
-      secret: config.JWT_SECRET,
     });
     app.register(healthCheckRoute, { prefix: '/v2' });
     app.register(nextUsageRoute, { prefix: '/v2' });
