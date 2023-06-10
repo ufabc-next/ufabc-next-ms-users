@@ -24,4 +24,4 @@ export async function mongoose(
   }
 }
 
-export default fastifyPlugin<FastifyMongooseOptions>(mongoose);
+export default fastifyPlugin(mongoose);

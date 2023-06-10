@@ -13,7 +13,7 @@ export async function buildApp(opts: FastifyServerOptions = {}) {
     app.register(healthCheckRoute, { prefix: '/v2' });
     app.register(nextUsageRoute, { prefix: '/v2' });
   } catch (error) {
-    app.log.fatal('setup app error', error);
+    app.log.fatal(error, 'setup app error');
     throw error;
   }
 
