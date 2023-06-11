@@ -10,17 +10,15 @@ if (process.env.NODE_ENV === 'test') {
 const envSchema = z.object({
   // Local machine
   NODE_ENV: z.enum(['dev', 'test', 'prod']).default('dev'),
-  PROTOCOL: z.enum(['http', 'https']).default('http'),
-  PORT: z.coerce.number().default(5000),
+  PORT: z.coerce.number().default(3000),
   HOST: z.string().min(4).default('localhost'),
-  ORIGIN: z.string().url(),
+  ORIGIN: z.string().url().default('http://localhost:5000'),
   JWT_SECRET: z.string().min(16),
   GRANT_SECRET: z.string().min(32),
 
   // OAUTH2
   OAUTH_FACEBOOK_KEY: z.string(),
   OAUTH_FACEBOOK_SECRET: z.string().min(16),
-
   OAUTH_GOOGLE_KEY: z.string(),
   OAUTH_GOOGLE_SECRET: z.string().min(16),
 
@@ -29,9 +27,11 @@ const envSchema = z.object({
   MONGODB_PORT: z.coerce.number().default(27017),
   MONGODB_PASSWORD: z.string().min(6),
   MONGODB_NAME: z.string(),
+
   // Redis
   REDIS_PORT: z.coerce.number().default(6379),
   REDIS_PASSWORD: z.string().min(8),
+
   // Docker URL
   MONGODB_CONNECTION_URL: z.string(),
   REDIS_CONNECTION_URL: z.string(),
