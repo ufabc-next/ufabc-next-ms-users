@@ -1,8 +1,4 @@
-lockfileVersion: '6.1'
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
+lockfileVersion: '6.0'
 
 dependencies:
   '@fastify/autoload':
@@ -35,9 +31,9 @@ dependencies:
   fastify-plugin:
     specifier: ^4.5.0
     version: 4.5.0
-  grant-fastify:
-    specifier: ^5.4.8
-    version: 5.4.8(fastify@4.15.0)
+  grant:
+    specifier: ^5.4.21
+    version: 5.4.21
   mongoose:
     specifier: ^7.1.1
     version: 7.1.1
@@ -2717,16 +2713,6 @@ packages:
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
     dev: true
-
-  /grant-fastify@5.4.8(fastify@4.15.0):
-    resolution: {integrity: sha512-05Pn1uBukFuDO2y+npdtem5/VZmz8oB6Cj1snCcrGaGXBsuNLGNBu5BXz4zG9wbpcYK2qbHVEU71Mev5eAFwsA==}
-    engines: {node: '>=8.0.0'}
-    peerDependencies:
-      fastify: '>=3.0.0'
-    dependencies:
-      fastify: 4.15.0
-      grant: 5.4.21
-    dev: false
 
   /grant@5.4.21:
     resolution: {integrity: sha512-QaoZudI9Gmh2W415gd71Iul6gpVH9sG1SkjfnGHtqYZopQDQ5PUVxRol5zFCrwGi9S0EbExbelHlZScgdChg2w==}
