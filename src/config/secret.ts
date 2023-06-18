@@ -41,7 +41,13 @@ const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
   console.error('invalid envs', _env.error.format());
-  throw new Error('Invalid environments variables');
+  const { fieldErrors } = _env.error.flatten();
+  const errorMessage = Object.entries(fieldErrors)
+    .map(([field, errors]) =>
+      errors ? `${field}: ${errors.join(', ')}` : field,
+    )
+    .join('\n  ');
+  throw new Error(`Missing environment variables:\n  ${errorMessage}`);
 }
 
 export const config = _env.data;

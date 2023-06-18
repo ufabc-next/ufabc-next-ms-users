@@ -20,4 +20,6 @@ export async function redis(
   }
 }
 
-export default fastifyPlugin(redis);
+export default fastifyPlugin(redis, {
+  name: 'Redis',
+});

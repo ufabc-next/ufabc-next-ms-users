@@ -23,4 +23,6 @@ export async function jwtAuth(app: FastifyInstance, opts: FastifyJWTOptions) {
   );
 }
 
-export default fastifyPlugin(jwtAuth);
+export default fastifyPlugin(jwtAuth, {
+  name: 'JsonWebToken',
+});
