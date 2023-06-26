@@ -1,4 +1,4 @@
-import type { FastifyInstance } from 'fastify';
+import type { FastifyInstance, RouteHandlerMethod } from 'fastify';
 import { fastifyPlugin } from 'fastify-plugin';
 import { fastifyCookie as cookie } from '@fastify/cookie';
 import {
@@ -12,6 +12,10 @@ export async function oauth(app: FastifyInstance, opts: {}) {
   const sessionConfig = {
     secret: config.GRANT_SECRET,
     saveUninitialized: true,
+    cookie: {
+      sameSite: true,
+      secure: 'auto',
+    },
   } satisfies FastifySessionOptions;
   const grantConfig = {
     defaults: { origin: config.ORIGIN },
@@ -27,9 +31,14 @@ export async function oauth(app: FastifyInstance, opts: {}) {
   app
     .register(cookie)
     .register(session, sessionConfig)
-    .register(fastifyGrantPlugin);
+    .register(fastifyGrantPlugin)
+    .get('/oauth/google', googleOauthDraft);
 }
 
 export default fastifyPlugin(oauth, {
   name: 'OAuth2',
 });
+
+const googleOauthDraft: RouteHandlerMethod = async (request, reply) => {
+  console.log('[SESSION]', request.session.grant);
+};

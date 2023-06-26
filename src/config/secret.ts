@@ -16,10 +16,19 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(16),
   GRANT_SECRET: z.string().min(32),
 
+  // AWS
+  AWS_ACCESS_KEY_ID: z.string(),
+  AWS_SECRET_ACCESS_KEY: z.string(),
+  AWS_REGION: z.string(),
+  // AWS Cognito
+  IDENTITY_POOL_ID: z.string(),
+  USER_POOL_ID: z.string(),
+  COGNITO_CLIENT_ID: z.string(),
+
   // OAUTH2
   OAUTH_FACEBOOK_KEY: z.string(),
   OAUTH_FACEBOOK_SECRET: z.string().min(16),
-  OAUTH_GOOGLE_KEY: z.string(),
+  OAUTH_GOOGLE_CLIENT_ID: z.string(),
   OAUTH_GOOGLE_SECRET: z.string().min(16),
 
   // MONGODB

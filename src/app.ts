@@ -5,13 +5,16 @@ import { join } from 'node:path';
 
 import { nextUsageRoute } from './modules/nextUsage';
 import { healthCheckRoute } from './modules/healthCheck';
+import { oauthRoute } from './modules/auth/oauth.routes';
 
 export async function buildApp(opts: FastifyServerOptions = {}) {
   const app = fastify(opts);
+
   try {
     app.register(fastifyAutoload, { dir: join(__dirname, 'plugins') });
     app.register(healthCheckRoute, { prefix: '/v2' });
     app.register(nextUsageRoute, { prefix: '/v2' });
+    app.register(oauthRoute, { prefix: '/sign-up' });
   } catch (error) {
     app.log.fatal(error, 'setup app error');
     throw error;
